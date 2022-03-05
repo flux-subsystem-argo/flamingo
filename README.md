@@ -5,7 +5,8 @@ Flamingo is **the Flux Subsystem for Argo** (FSA). Flamingo's container image ca
 ## Getting Started with a Fresh KIND cluster
 
 In this getting started guide, you'll be walked through steps to prepare your ultimate GitOps environment using ArgoCD and Flux.
-We'll bootstrap everything, including installation of ArgoCD, from this public repo. So no secret is required. 
+We'll bootstrap everything, including installation of ArgoCD, from this public repo. So no manual step of ArgoCD installation is required.
+In case you're forking this repo and change its visibility to private, you will be required to setup a Secret to authenticate your Git repo.
 
 At the end of this guide, you'll have Flux running alongside ArgoCD locally on your KIND cluster. You'll run FSA in the anonymous mode, and see 2 pre-defined ArgoCD Applications, each of which points to its equivalent Flux Kustomization.
 
