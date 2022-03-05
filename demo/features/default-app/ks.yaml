@@ -11,7 +11,8 @@ spec:
   prune: true
   force: false
   sourceRef:
-    name: fsa-demo
     kind: GitRepository
+    name: fsa-demo
+    namespace: flux-system
   dependsOn:
   - name: fsa-installation

@@ -16,6 +16,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: fsa-demo
+    namespace: flux-system
   timeout: 10m
   targetNamespace: argocd
   wait: true
