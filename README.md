@@ -26,19 +26,29 @@ brew install fluxcd/tap/flux
 
 # install ArgoCD CLI
 brew install argocd
+
 ```
 
 Create a fresh KIND cluster
+
 ```shell
 kind create cluster
 ```
 
-Install Flux
+Install **Flux**
+
 ```shell
 flux install
+
 ```
 
+You can check flux namespace for running pods `kubectl get pods -n flux-system`
+
+![image](./images/kubectl-get-ns-flux-system.png)
+
+
 Copy, and paste this snippet to bootstrap the demo.
+
 ```shell
 cat <<EOF | kubectl apply -f -
 ---
@@ -70,6 +80,11 @@ spec:
 EOF
 ```
 
+Check ArgoCD pods are running and Ready `kubectl get -n argocd pods`
+
+![image](./images/argocd-pods-ready.png)
+
+
 Finally, port forward and open your browser to http://localhost:8080
 
 ```
@@ -77,3 +92,4 @@ kubectl -n argocd port-forward svc/argocd-server 8080:443
 ```
 
 ![image](https://user-images.githubusercontent.com/10666/156883761-3977cc1d-ea5b-4bb7-a0ac-6defdf665e4e.png)
+
