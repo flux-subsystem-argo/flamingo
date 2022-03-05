@@ -20,7 +20,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: default-app
+  name: fsa-installation
   namespace: argocd
 spec:
   destination:
