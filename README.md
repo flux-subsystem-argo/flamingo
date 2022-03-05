@@ -31,7 +31,7 @@ Install Flux
 flux install
 ```
 
-Copy, paste and run this snippet to bootstrap the demo.
+Copy, and paste this snippet to bootstrap the demo.
 ```shell
 cat <<EOF | kubectl apply -f -
 ---
@@ -61,3 +61,11 @@ spec:
   timeout: 3m
 EOF
 ```
+
+Finally, port forward and open your browser to http://localhost:8080
+
+```
+kubectl -n argocd port-forward svc/argocd-server 8080:443
+```
+
+![image](https://user-images.githubusercontent.com/10666/156883761-3977cc1d-ea5b-4bb7-a0ac-6defdf665e4e.png)
