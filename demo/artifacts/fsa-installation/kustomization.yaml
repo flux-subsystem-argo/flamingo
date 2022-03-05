@@ -3,7 +3,38 @@ kind: Kustomization
 resources:
 - https://raw.githubusercontent.com/argoproj/argo-cd/v2.2.5/manifests/install.yaml
 patches:
-- config-maps.yaml
+- patch: |-
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: argocd-cm
+      labels:
+        app.kubernetes.io/name: argocd-cm
+        app.kubernetes.io/part-of: argocd
+    data:
+      users.anonymous.enabled: "true"
+  target:
+    kind: ConfigMap
+    name: argocd-cm
+- patch: |-
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      labels:
+        app.kubernetes.io/name: argocd-rbac-cm
+        app.kubernetes.io/part-of: argocd
+      name: argocd-rbac-cm
+    data:
+      policy.default: role:readonly
+      policy.csv: |
+        p, role:readonly, applications, get, default/*, allow
+        p, role:readonly, applications, sync, default/*, allow
+        p, role:readonly, clusters, get, *, allow
+        p, role:readonly, repositories, get, *, allow
+        p, role:readonly, project, get, default/*, allow
+  target:
+    kind: ConfigMap
+    name: argocd-rbac-cm
 images:
 - name: quay.io/argoproj/argocd:v2.2.5
   newName: ghcr.io/chanwit/flamingo/argocd
