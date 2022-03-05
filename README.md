@@ -11,7 +11,7 @@ In case you're forking this repo and change its visibility to private, you will 
 At the end of this guide, you'll have Flux running alongside ArgoCD locally on your KIND cluster. You'll run FSA in the anonymous mode, and see 2 pre-defined ArgoCD Applications, each of which points to its equivalent Flux Kustomization.
 
 Install CLIs
-- [kind cli](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) 
+- [KIND cli](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) 
 - [Flux cli](https://fluxcd.io/docs/cmd/)
 - [ArgoCD cli](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
 
