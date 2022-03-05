@@ -12,4 +12,5 @@ spec:
     kind: GitRepository
     name: fsa-demo
   timeout: 3m
+  targetNamespace: argocd
   wait: true
