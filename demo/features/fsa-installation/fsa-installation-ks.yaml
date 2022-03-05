@@ -2,12 +2,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: fsa-release-ks
+  name: fsa-installation
   namespace: flux-system
 spec:
   prune: true
   interval: 2m
-  path: "./release"
+  path: "./demo/artifacts/fsa-installation"
   sourceRef:
     kind: GitRepository
     name: fsa-demo
