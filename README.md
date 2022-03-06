@@ -1,6 +1,6 @@
-# Flamingo
+# FSA - the Flux Subsystem for Argo
 
-Flamingo is **the Flux Subsystem for Argo** (FSA). Flamingo's container image can be used as a drop-in replacement for the equivalent ArgoCD version to visualize, and manage Flux workloads, along side ArgoCD.
+FSA (aka Flamingo) is **the Flux Subsystem for Argo** (FSA). FSA's container image can be used as a drop-in replacement for the equivalent ArgoCD version to visualize, and manage Flux workloads, along side ArgoCD.
 
 ## Getting Started with a Fresh KIND cluster
 
@@ -15,7 +15,7 @@ Install CLIs
 - [Flux cli](https://fluxcd.io/docs/cmd/)
 - [ArgoCD cli](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
 
-Example install in macOS via [homebrew](https://brew.sh/)
+Example install in macOS or Linux via [homebrew](https://brew.sh/)
 
 ```shell
 # install KIND cli
@@ -42,7 +42,7 @@ flux install
 
 ```
 
-You can check flux namespace for running pods `kubectl get pods -n flux-system`
+You can check the Flux namespace (`flux-system`) for running pods `kubectl get pods -n flux-system`
 
 ![image](./images/kubectl-get-ns-flux-system.png)
 
