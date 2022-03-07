@@ -1,6 +1,6 @@
 # FSA - the Flux Subsystem for Argo
 
-FSA (aka Flamingo) is **the Flux Subsystem for Argo** (FSA). FSA's container image can be used as a drop-in replacement for the equivalent ArgoCD version to visualize, and manage Flux workloads, along side ArgoCD.
+FSA (aka Flamingo) is **the Flux Subsystem for Argo**. FSA's container image can be used as a drop-in replacement for the equivalent ArgoCD version to visualize, and manage Flux workloads, along side ArgoCD.
 
 ## Getting Started with a Fresh KIND cluster
 
