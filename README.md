@@ -4,7 +4,7 @@ FSA (aka Flamingo) is **the Flux Subsystem for Argo**. FSA's container image can
 
 ## How does it work?
 
-![FSA (1)](https://user-images.githubusercontent.com/10666/159502165-dad552df-737c-411b-85be-6e86af3bcca8.png)
+![FSA (2)](https://user-images.githubusercontent.com/10666/159503288-5faeda59-8b54-40f0-95ca-b46c22742e30.png)
 
 ## Getting Started with a Fresh KIND cluster
 
