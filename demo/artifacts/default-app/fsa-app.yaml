@@ -10,9 +10,9 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: ./
-    repoURL: flux://loopback
-    targetRevision: HEAD
+    path: ./demo/artifacts/default-app
+    repoURL: https://github.com/flux-subsystem-argo/flamingo
+    targetRevision: main
   syncPolicy:
     syncOptions:
     - ApplyOutOfSyncOnly=true
