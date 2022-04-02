@@ -64,7 +64,7 @@ metadata:
 spec:
   interval: 30s
   # Change url to your forked gitrepo e.g, https://github.com/GitHubUserID/flamingo
-  url: https://github.com/chanwit/flamingo
+  url: https://github.com/flux-subsystem-argo/flamingo
   ref:
     branch: main
 ---
