@@ -16,6 +16,7 @@ spec:
   syncPolicy:
     syncOptions:
     - ApplyOutOfSyncOnly=true
+    - FluxSubsystem=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -34,3 +35,4 @@ spec:
   syncPolicy:
     syncOptions:
     - ApplyOutOfSyncOnly=true
+    - FluxSubsystem=true
