@@ -95,7 +95,8 @@ Finally, port forward and open your browser to http://localhost:8080
 kubectl -n argocd port-forward svc/argocd-server 8080:443
 ```
 
-You'll find 2 ArgoCD Applications, each of which consists of 1 Flux's Kustomization and 1 Flux's GitRepository.
+You'll find 2 FSA Applications, each of which consists of 1 Flux's Kustomization and 1 Flux's GitRepository.
 
-![image](https://user-images.githubusercontent.com/10666/156883761-3977cc1d-ea5b-4bb7-a0ac-6defdf665e4e.png)
+![image](https://user-images.githubusercontent.com/10666/161395963-bbabbd72-03f5-4cef-b16d-346afd0eb1fc.png)
 
+![image](https://user-images.githubusercontent.com/10666/161396000-0282f538-88a9-4449-8501-6d7b3a64f2a6.png)
