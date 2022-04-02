@@ -2,11 +2,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: fsa-demo
+  name: default-app
   namespace: argocd
 spec:
   destination:
-    namespace: flux-system
+    namespace: argocd
     server: https://kubernetes.default.svc
   project: default
   source:
