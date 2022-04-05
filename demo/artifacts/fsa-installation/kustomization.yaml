@@ -38,5 +38,5 @@ patches:
 images:
 - name: quay.io/argoproj/argocd:v2.2.8
   newName: ghcr.io/flux-subsystem-argo/fsa/argocd
-  newTag: v2.2.8-fl.0-main-3cefc21e
+  newTag: dev
  
