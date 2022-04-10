@@ -5,4 +5,4 @@ resources:
 images:
   - name: quay.io/argoproj/argocd:v2.2.8
     newName: ghcr.io/flux-subsystem-argo/fsa/argocd
-    newTag: v2.2.8-fl.1-main-0fb0615a
+    newTag: v2.2.8-fl.1-main-305be5e6
