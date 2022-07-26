@@ -56,7 +56,7 @@ Copy, and paste this snippet to bootstrap the demo.
 ```shell
 cat <<EOF | kubectl apply -f -
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta1
+apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
 metadata:
   name: fsa-demo
