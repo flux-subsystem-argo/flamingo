@@ -57,16 +57,15 @@ Copy, and paste this snippet to bootstrap the demo.
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: GitRepository
+kind: OCIRepository
 metadata:
   name: fsa-demo
   namespace: flux-system
 spec:
   interval: 30s
-  # Change url to your forked gitrepo e.g, https://github.com/GitHubUserID/flamingo
-  url: https://github.com/flux-subsystem-argo/flamingo
+  url: oci://ghcr.io/flux-subsystem-argo/manifests/demo
   ref:
-    branch: main
+    branch: latest
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -76,9 +75,9 @@ metadata:
 spec:
   prune: true
   interval: 2m
-  path: "./demo"
+  path: "./"
   sourceRef:
-    kind: GitRepository
+    kind: OCIRepository
     name: fsa-demo
   timeout: 3m
 EOF
