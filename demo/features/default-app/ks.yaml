@@ -11,7 +11,7 @@ spec:
   prune: true
   force: false
   sourceRef:
-    kind: GitRepository
+    kind: OCIRepository
     name: fsa-demo
     namespace: flux-system
   dependsOn:

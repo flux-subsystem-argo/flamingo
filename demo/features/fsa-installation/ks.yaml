@@ -14,7 +14,7 @@ spec:
   interval: 2m
   path: "./demo/artifacts/fsa-installation"
   sourceRef:
-    kind: GitRepository
+    kind: OCIRepository
     name: fsa-demo
     namespace: flux-system
   timeout: 10m

@@ -63,7 +63,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30s
-  url: oci://ghcr.io/flux-subsystem-argo/manifests/demo
+  url: oci://ghcr.io/flux-subsystem-argo/manifests
   ref:
     tag: latest
 ---
@@ -75,7 +75,7 @@ metadata:
 spec:
   prune: true
   interval: 2m
-  path: "./"
+  path: "./demo"
   sourceRef:
     kind: OCIRepository
     name: fsa-demo
