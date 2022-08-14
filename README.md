@@ -63,7 +63,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30s
-  url: oci://ghcr.io/flux-subsystem-argo/manifests
+  url: oci://ghcr.io/flux-subsystem-argo/flamingo/manifests
   ref:
     tag: latest
 ---
