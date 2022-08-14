@@ -65,7 +65,7 @@ spec:
   interval: 30s
   url: oci://ghcr.io/flux-subsystem-argo/manifests/demo
   ref:
-    branch: latest
+    tag: latest
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
