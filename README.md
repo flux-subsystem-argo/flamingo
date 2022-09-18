@@ -73,7 +73,7 @@ spec:
   interval: 30s
   url: oci://ghcr.io/flux-subsystem-argo/flamingo/manifests
   ref:
-    tag: latest
+    tag: v2.3
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -89,6 +89,7 @@ spec:
     name: fsa-demo
   timeout: 3m
 EOF
+
 ```
 
 Check ArgoCD pods are running and Ready `kubectl get -n argocd pods`
