@@ -2,6 +2,14 @@
 
 FSA (aka Flamingo) is **Flux Subsystem for Argo**. FSA's container image can be used as a drop-in replacement for the equivalent ArgoCD version to visualize, and manage Flux workloads, alongside ArgoCD.
 
+## Support Matrix
+
+|Flux  | Argo CD | Image
+|:----:|:-------:|---------------------------
+|v0.34 | v2.4    | v2.4.12-fl.2-main-48924539
+|v0.34 | v2.3    | v2.3.7-fl.2-main-c0a31047
+|v0.34 | v2.2    | v2.2.12-fl.2-main-3cfeb42e
+
 ## How does it work?
 
 ![FSA (2)](https://user-images.githubusercontent.com/10666/159503288-5faeda59-8b54-40f0-95ca-b46c22742e30.png)
