@@ -8,9 +8,9 @@ FSA (aka Flamingo) is **Flux Subsystem for Argo**. FSA's container image can be 
 
 |Flux  | Argo CD | Image
 |:----:|:-------:|---------------------------
-|v0.34 | v2.4    | v2.4.12-fl.2-main-d68e6cb8
-|v0.34 | v2.3    | v2.3.7-fl.2-main-c0a31047
-|v0.34 | v2.2    | v2.2.12-fl.2-main-3cfeb42e
+|v0.34 | v2.4    | v2.4.13-fl.2-main-016c20e9
+|v0.34 | v2.3    | v2.3.8-fl.2-main-016c20e9
+|v0.34 | v2.2    | v2.2.13-fl.2-main-016c20e9
 
 ## How does it work?
 
