@@ -99,7 +99,7 @@ Check ArgoCD pods are running and Ready `kubectl get -n argocd pods`
 ![image](./images/argocd-pods-ready.png)
 
 
-Finally, port forward and open your browser to http://localhost:8080
+After that you can port forward and open your browser to http://localhost:8080
 
 ```
 kubectl -n argocd port-forward svc/argocd-server 8080:443
@@ -110,3 +110,10 @@ You'll find 2 FSA Applications, each of which consists of 1 Flux's Kustomization
 ![image](https://user-images.githubusercontent.com/10666/161395963-bbabbd72-03f5-4cef-b16d-346afd0eb1fc.png)
 
 ![image](https://user-images.githubusercontent.com/10666/161396000-0282f538-88a9-4449-8501-6d7b3a64f2a6.png)
+
+Like a normal Argo CD instance, please firstly obtain the initial password by running the following command to login and create other Flux applications.
+The default user name is `admin`.
+
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+```
