@@ -76,7 +76,7 @@ spec:
   interval: 30s
   url: oci://ghcr.io/flux-subsystem-argo/flamingo/manifests
   ref:
-    tag: v2.4
+    tag: v2.5
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
