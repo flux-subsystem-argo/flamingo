@@ -1,8 +1,20 @@
-# FSA - Flux Subsystem for Argo
+# Flamingo - the Flux Subsystem for Argo
 
-FSA (aka Flamingo) is **Flux Subsystem for Argo**. FSA's container image can be used as a drop-in replacement for the equivalent ArgoCD version to visualize, and manage Flux workloads, alongside ArgoCD.
+Flamingo is the **Flux Subsystem for Argo** (FSA). Flamingo's container image can be used as a drop-in replacement for the equivalent ArgoCD version to visualize, and manage Flux workloads, alongside ArgoCD.
 
-![fsa_logo_alpha_200x200](https://user-images.githubusercontent.com/10666/190959808-725101fd-6e11-4057-af55-f0ab37f3983c.png)
+## Why use Flamingo?
+
+Flamingo is a tool that combines Flux and Argo CD to provide the best of both worlds for implementing GitOps on Kubernetes clusters. With Flamingo, you can:
+
+1. Automate the deployment of your applications to Kubernetes clusters and benefit from the improved collaboration and deployment speed and reliability that GitOps offers.
+
+2. Enjoy a seamless and integrated experience for managing deployments, with the automation capabilities of Flux embedded inside the user-friendly interface of Argo CD.
+
+3. Take advantage of additional features and capabilities that are not available in either Flux or Argo CD individually, such the robust Helm support from Flux, Flux OCI Repository, Weave GitOps Terraform Controller for Infrastructure as Code, Weave Policy Engine, or Argo CD ApplicationSet for Flux-managed resources.
+
+Try Flamingo today and see how it can improve your GitOps workflow on Kubernetes.
+
+This provides a brief overview of the benefits of using Flamingo and why it could be a useful tool for implementing GitOps on Kubernetes clusters. Of course, you may want to tailor this to your specific use case and requirements, but this should give you a good starting point.
 
 ## Support Matrix
 
