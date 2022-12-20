@@ -1,8 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.5.0/manifests/install.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.5.5/manifests/install.yaml
 images:
-  - name: quay.io/argoproj/argocd:v2.5.0
+  - name: quay.io/argoproj/argocd:v2.5.5
     newName: ghcr.io/flux-subsystem-argo/fsa/argocd
-    newTag: v2.5.0-fl.3-main-2bba0ae6
+    newTag: v2.5.5-fl.3-main-46fefeb3
