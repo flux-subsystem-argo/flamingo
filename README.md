@@ -120,9 +120,11 @@ kubectl -n argocd port-forward svc/argocd-server 8080:443
 
 You'll find 2 FSA Applications, each of which consists of 1 Flux's Kustomization and 1 Flux's GitRepository.
 
-![image](https://user-images.githubusercontent.com/10666/161395963-bbabbd72-03f5-4cef-b16d-346afd0eb1fc.png)
+![image1](https://user-images.githubusercontent.com/10666/208858892-5e5d14d9-61c7-4c61-af29-1883e7137509.png)
 
-![image](https://user-images.githubusercontent.com/10666/161396000-0282f538-88a9-4449-8501-6d7b3a64f2a6.png)
+![image2](https://user-images.githubusercontent.com/10666/208858840-fca56550-a2a1-4fff-829e-f1469e921c86.png)
+
+![image3](https://user-images.githubusercontent.com/10666/208858784-9a508a5b-8d47-47d8-b5a5-0f9adaff72cf.png)
 
 Like a normal Argo CD instance, please firstly obtain the initial password by running the following command to login and create other Flux applications.
 The default user name is `admin`.
