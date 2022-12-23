@@ -27,6 +27,18 @@ This provides a brief overview of the benefits of using Flamingo and why it coul
 
 ## How does it work?
 
+**Loopback Reconciliation** is a feature of Flamingo that helps to synchronize applications deployed using the GitOps approach. It is activated when the "FluxSubsystem" feature is enabled in the ArgoCD user interface (UI).
+
+Here's how Loopback Reconciliation works:
+
+1. An ArgoCD application manifest is created and deployed to a cluster, either in Kustomization or Helm mode.
+
+2. Flamingo converts the ArgoCD application manifest into the equivalent Flux object, either a Kustomization object or a HelmRelease object with a Source, depending on the mode used in the ArgoCD manifest. If Flux objects already exist for the application, Flamingo will use them as references instead of creating new ones.
+
+3. Flamingo synchronizes or reconciles the state of the ArgoCD application with its Flux counterparts by using the state of the Flux objects as the desired state. To do this, the Loopback Reconciliation mechanism bypasses the native reconciliation process in ArgoCD and relies on Flux reconciliation instead. It then uses the result from the Flux objects to report back to ArgoCD.
+
+4. Loopback Reconciliation helps to ensure the reliability and consistency of GitOps-based deployments by keeping the state of applications in sync with their desired state defined in the Flux objects. The technique gets its name because it involves "looping back" to the desired state defined in the Flux objects as references to reconcile the state of the application.
+
 ![FSA (2)](https://user-images.githubusercontent.com/10666/159503288-5faeda59-8b54-40f0-95ca-b46c22742e30.png)
 
 ## Getting Started with a Fresh KIND cluster
