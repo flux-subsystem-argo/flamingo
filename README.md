@@ -43,11 +43,9 @@ Loopback Reconciliation helps to ensure the reliability and consistency of GitOp
 
 ## Getting Started with a Fresh KIND cluster
 
-In this getting started guide, you'll be walked through steps to prepare your ultimate GitOps environment using ArgoCD and Flux.
-We'll bootstrap everything, including installation of ArgoCD, from this public repo. So no manual step of ArgoCD installation is required.
-In case you're forking this repo and change its visibility to private, you will be required to setup a Secret to authenticate your Git repo.
+This guide will provide a step-by-step process for setting up a GitOps environment using Flux and ArgoCD, via Flamingo. We will use this public repository to install and bootstrap Flamingo, so no manual installation steps are required. However, if you fork the repository and make it private, you will need to set up a Secret to authenticate your Git repository.
 
-At the end of this guide, you'll have Flux running alongside ArgoCD locally on your KIND cluster. You'll run FSA in the anonymous mode, and see 2 pre-defined ArgoCD Applications, each of which points to its equivalent Flux Kustomization.
+By the end of this guide, you will have Flamingo running locally on your KIND cluster. You will run Flamingo in anonymous mode and see two pre-defined ArgoCD applications, each of which points to its equivalent Flux Kustomization.
 
 Install CLIs
 - [KIND cli](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) 
