@@ -20,8 +20,9 @@ This provides a brief overview of the benefits of using Flamingo and why it coul
 
 |Flux  | Argo CD | Image
 |:----:|:-------:|---------------------------
-|v0.38 | v2.5    | v2.5.7-fl.3-main-b0b6148f
-|v0.38 | v2.4    | v2.4.19-fl.3-main-b0b6148f
+|v0.41 | v2.6    | v2.6.6-fl.4-main-0d5eae51
+|v0.41 | v2.5    | v2.5.15-fl.3-main-0d5eae51
+|v0.41 | v2.4    | v2.4.27-fl.3-main-0d5eae51
 |v0.38 | v2.3    | v2.3.13-fl.3-main-b0b6148f
 |v0.37 | v2.2    | v2.2.16-fl.3-main-2bba0ae6
 
@@ -98,7 +99,7 @@ spec:
   interval: 30s
   url: oci://ghcr.io/flux-subsystem-argo/flamingo/manifests
   ref:
-    tag: v2.5
+    tag: v2.6
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -121,6 +122,12 @@ Check ArgoCD pods are running and Ready `kubectl get -n argocd pods`
 
 ![image](./images/argocd-pods-ready.png)
 
+Like a normal Argo CD instance, please firstly obtain the initial password by running the following command to login and create other Flux applications.
+The default user name is `admin`.
+
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+```
 
 After that you can port forward and open your browser to http://localhost:8080
 
@@ -135,10 +142,3 @@ You'll find 2 FSA Applications, each of which consists of 1 Flux's Kustomization
 ![image2](https://user-images.githubusercontent.com/10666/208858840-fca56550-a2a1-4fff-829e-f1469e921c86.png)
 
 ![image3](https://user-images.githubusercontent.com/10666/208858784-9a508a5b-8d47-47d8-b5a5-0f9adaff72cf.png)
-
-Like a normal Argo CD instance, please firstly obtain the initial password by running the following command to login and create other Flux applications.
-The default user name is `admin`.
-
-```
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-```
