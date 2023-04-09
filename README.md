@@ -99,6 +99,9 @@ kind: OCIRepository
 metadata:
   name: fsa-demo
   namespace: flux-system
+  annotations:
+    metadata.weave.works/flamingo-default-app: "https://localhost.local:8080/applications/argocd/default-app?view=tree"    
+    metadata.weave.works/flamingo-fsa-installation: "https://localhost.local:8080/applications/argocd/fsa-installation?view=tree"    
 spec:
   interval: 30s
   url: oci://ghcr.io/flux-subsystem-argo/flamingo/manifests
@@ -110,6 +113,8 @@ kind: Kustomization
 metadata:
   name: fsa-demo
   namespace: flux-system
+  annotations:
+    metadata.weave.works/flamingo-fsa-demo: "https://localhost.local:8080/applications/argocd/fsa-demo?view=tree"    
 spec:
   prune: true
   interval: 2m
