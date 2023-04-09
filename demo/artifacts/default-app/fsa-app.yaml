@@ -5,7 +5,7 @@ metadata:
   name: default-app
   namespace: argocd
   annotations:
-    weave.gitops.flamingo/base-url: "http://localhost:9001"
+    weave.gitops.flamingo/base-url: "http://localhost.local:9001"
     weave.gitops.flamingo/cluster-name: "Default"
 spec:
   destination:
@@ -27,7 +27,7 @@ metadata:
   name: fsa-installation
   namespace: argocd
   annotations:
-    weave.gitops.flamingo/base-url: "http://localhost:9001"
+    weave.gitops.flamingo/base-url: "http://localhost.local:9001"
     weave.gitops.flamingo/cluster-name: "Default"
 spec:
   destination:

@@ -10,7 +10,7 @@ metadata:
   name: fsa-installation
   namespace: argocd
   annotations:
-    metadata.weave.works/flamingo-app: "https://localhost:8080/applications/argocd/fsa-installation"
+    metadata.weave.works/flamingo-app: "https://localhost.local:8080/applications/argocd/fsa-installation?view=tree"
 spec:
   prune: true
   interval: 2m

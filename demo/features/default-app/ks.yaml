@@ -5,7 +5,7 @@ metadata:
   name: default-app
   namespace: argocd
   annotations:
-    metadata.weave.works/flamingo-app: "https://localhost:8080/applications/argocd/default-app"
+    metadata.weave.works/flamingo-app: "https://localhost.local:8080/applications/argocd/default-app?view=tree"
 spec:
   timeout: 2m
   path: ./demo/artifacts/default-app
