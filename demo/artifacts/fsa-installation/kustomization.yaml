@@ -14,27 +14,27 @@ patches:
     data:
       users.anonymous.enabled: "true"
       resource.links: |
-        - url: http://localhost:9001/oci/details?clusterName=Default&name={{.resource.metadata.name}}&namespace={{.resource.metadata.namespace}}
+        - url: http://localhost:9001/oci/details?clusterName=Default&name={{.metadata.name}}&namespace={{.metadata.namespace}}
           title: "Weave GitOps"
-          if: resource.kind == "OCIRepository"
-        - url: http://localhost:9001/git_repo/details?clusterName=Default&name={{.resource.metadata.name}}&namespace={{.resource.metadata.namespace}}
+          if: kind == "OCIRepository"
+        - url: http://localhost:9001/git_repo/details?clusterName=Default&name={{.metadata.name}}&namespace={{.metadata.namespace}}
           title: "Weave GitOps"
-          if: resource.kind == "GitRepository"
-        - url: http://localhost:9001/bucket/details?clusterName=Default&name={{.resource.metadata.name}}&namespace={{.resource.metadata.namespace}}
+          if: kind == "GitRepository"
+        - url: http://localhost:9001/bucket/details?clusterName=Default&name={{.metadata.name}}&namespace={{.metadata.namespace}}
           title: "Weave GitOps"
-          if: resource.kind == "Bucket"
-        - url: http://localhost:9001/helm_chart/details?clusterName=Default&name={{.resource.metadata.name}}&namespace={{.resource.metadata.namespace}}
+          if: kind == "Bucket"
+        - url: http://localhost:9001/helm_chart/details?clusterName=Default&name={{.metadata.name}}&namespace={{.metadata.namespace}}
           title: "Weave GitOps"
-          if: resource.kind == "HelmChart"
-        - url: http://localhost:9001/kustomization/details?clusterName=Default&name={{.resource.metadata.name}}&namespace={{.resource.metadata.namespace}}
+          if: kind == "HelmChart"
+        - url: http://localhost:9001/kustomization/details?clusterName=Default&name={{.metadata.name}}&namespace={{.metadata.namespace}}
           title: "Weave GitOps"
-          if: resource.kind == "Kustomization"
-        - url: http://localhost:9001/helm_release/details?clusterName=Default&name={{.resource.metadata.name}}&namespace={{.resource.metadata.namespace}}
+          if: kind == "Kustomization"
+        - url: http://localhost:9001/helm_release/details?clusterName=Default&name={{.metadata.name}}&namespace={{.metadata.namespace}}
           title: "Weave GitOps"
-          if: resource.kind == "HelmRelease"
-        - url: http://localhost:9001/terraform_object/details?clusterName=Default&name={{.resource.metadata.name}}&namespace={{.resource.metadata.namespace}}
+          if: kind == "HelmRelease"
+        - url: http://localhost:9001/terraform_object/details?clusterName=Default&name={{.metadata.name}}&namespace={{.metadata.namespace}}
           title: "Weave GitOps"
-          if: resource.kind == "Terraform"
+          if: kind == "Terraform"
   target:
     kind: ConfigMap
     name: argocd-cm
