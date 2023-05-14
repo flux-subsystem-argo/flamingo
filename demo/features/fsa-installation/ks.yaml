@@ -11,6 +11,7 @@ metadata:
   namespace: argocd
   annotations:
     metadata.weave.works/flamingo-fsa-installation: "https://localhost:8080/applications/argocd/fsa-installation?view=tree"
+    link.argocd.argoproj.io/external-link: "http://localhost:9001/kustomize/details?clusterName=Default&name=fsa-installation&namespace=argocd"
 spec:
   prune: true
   interval: 2m

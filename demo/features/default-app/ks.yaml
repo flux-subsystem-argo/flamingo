@@ -6,6 +6,7 @@ metadata:
   namespace: argocd
   annotations:
     metadata.weave.works/flamingo-default-app: "https://localhost:8080/applications/argocd/default-app?view=tree"
+    link.argocd.argoproj.io/external-link: "http://localhost:9001/kustomize/details?clusterName=Default&name=default-app&namespace=argocd"
 spec:
   timeout: 2m
   path: ./demo/artifacts/default-app
