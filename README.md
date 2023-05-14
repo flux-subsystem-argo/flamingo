@@ -22,13 +22,14 @@ This provides a brief overview of the benefits of using Flamingo and why it coul
 
 ## Support Matrix
 
-|Flux  | Argo CD | Image
-|:----:|:-------:|---------------------------
-|v0.41 | v2.6    | v2.6.7-fl.4-main-c4ce7dcc
-|v0.41 | v2.5    | v2.5.16-fl.3-main-c4ce7dcc
-|v0.41 | v2.4    | v2.4.28-fl.3-main-c4ce7dcc
-|v0.38 | v2.3    | v2.3.13-fl.3-main-b0b6148f
-|v0.37 | v2.2    | v2.2.16-fl.3-main-2bba0ae6
+|Flux        | Argo CD | Image
+|:----------:|:-------:|---------------------------
+|v2.0.0-rc.3 | v2.7    | v2.7.2-fl.6-main-b1742696
+|v0.41       | v2.6    | v2.6.7-fl.4-main-c4ce7dcc
+|v0.41       | v2.5    | v2.5.16-fl.3-main-c4ce7dcc
+|v0.41       | v2.4    | v2.4.28-fl.3-main-c4ce7dcc
+|v0.38       | v2.3    | v2.3.13-fl.3-main-b0b6148f
+|v0.37       | v2.2    | v2.2.16-fl.3-main-2bba0ae6
 
 ## How does it work?
 
@@ -108,7 +109,7 @@ spec:
   ref:
     tag: v2.6
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: fsa-demo
