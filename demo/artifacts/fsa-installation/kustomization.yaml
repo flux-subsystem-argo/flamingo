@@ -60,4 +60,4 @@ patches:
 images:
 - name: quay.io/argoproj/argocd:v2.7.2
   newName: ghcr.io/flux-subsystem-argo/fsa/argocd
-  newTag: v2.7.2-fl.6-main-c25f61dd
+  newTag: v2.7.2-fl.6-main-fa20ba74
