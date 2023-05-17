@@ -2,7 +2,7 @@
 
 Flamingo is the **Flux Subsystem for Argo** (FSA). Flamingo's container image can be used as a drop-in extension for the equivalent ArgoCD version to visualize, and manage Flux workloads, alongside ArgoCD. You can also ensure that upstream CVEs in Argo CD are quickly backported to Flamingo, maintaining a secure and stable environment.
 
-![support_by_weaveworks](https://user-images.githubusercontent.com/10666/230028749-213c5dd2-0cc5-49bc-8323-42b5e9dd0639.png)
+![support_by_weaveworks](https://github.com/flux-subsystem-argo/flamingo/assets/10666/5ce54337-97f9-4a2c-9dd9-d0959dee6177)
 
 This opensource project is sponsored by [Weaveworks](https://www.weave.works/blog/weave-gitops-assured-accelerator-oss-with-enterprise-support), and they provide commercial support for its users via **Weave GitOps Assured Accelerator**.
 
