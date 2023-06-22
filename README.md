@@ -24,9 +24,9 @@ This provides a brief overview of the benefits of using Flamingo and why it coul
 
 |Flux        | Argo CD | Image
 |:----------:|:-------:|---------------------------
-|v2.0.0-rc.3 | v2.7    | v2.7.2-fl.6-main-b1742696
-|v0.41       | v2.6    | v2.6.7-fl.4-main-c4ce7dcc
-|v0.41       | v2.5    | v2.5.16-fl.3-main-c4ce7dcc
+|v2.0.0-rc.5 | v2.7    | v2.7.6-fl.15-main-52691a11
+|v0.41       | v2.6    | v2.6.11-fl.15-main-79fd5954
+|v0.41       | v2.5    | v2.5.19-fl.3-main-3de961f2
 |v0.41       | v2.4    | v2.4.28-fl.3-main-c4ce7dcc
 |v0.38       | v2.3    | v2.3.13-fl.3-main-b0b6148f
 |v0.37       | v2.2    | v2.2.16-fl.3-main-2bba0ae6
