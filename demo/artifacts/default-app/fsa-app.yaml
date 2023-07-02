@@ -15,7 +15,7 @@ spec:
   source:
     path: ./demo/artifacts/default-app
     repoURL: oci://ghcr.io/flux-subsystem-argo/flamingo/manifests
-    targetRevision: v2.7
+    targetRevision: v2.8
   syncPolicy:
     syncOptions:
     - ApplyOutOfSyncOnly=true
@@ -37,7 +37,7 @@ spec:
   source:
     path: ./demo/artifacts/fsa-installation
     repoURL: oci://ghcr.io/flux-subsystem-argo/flamingo/manifests
-    targetRevision: v2.7
+    targetRevision: v2.8
   syncPolicy:
     syncOptions:
     - ApplyOutOfSyncOnly=true
