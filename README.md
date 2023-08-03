@@ -23,9 +23,9 @@ This provides a brief overview of the benefits of using Flamingo and why it coul
 ## Support Matrix
 
 |Flux        | Argo CD | Image
-|:----------:|:-------:|---------------------------
-|v2.0.0      | v2.8    | v2.8.0-rc2-fl.15-main-ed1f41f7
-|v2.0.0      | v2.7    | v2.7.7-fl.15-main-cdbce523
+|:----------:|:-------:|--------------------------------
+|v2.0.1      | v2.8    | v2.8.0-rc6-fl.15-main-da46678f
+|v2.0.1      | v2.7    | v2.7.10-fl.15-main-688d2fd7
 |v0.41       | v2.6    | v2.6.11-fl.15-main-79fd5954
 |v0.41       | v2.5    | v2.5.19-fl.3-main-3de961f2
 |v0.41       | v2.4    | v2.4.28-fl.3-main-c4ce7dcc
