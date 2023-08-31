@@ -1,0 +1,82 @@
+project_name: flamingo
+builds:
+  - <<: &build_defaults
+      binary: flamingo
+      main: ./cmd/flamingo
+      ldflags:
+        - -s -w -X main.Version={{ .Version }}
+      env:
+        - CGO_ENABLED=0
+    id: linux
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+      - arm
+    goarm:
+      - 7
+  - <<: *build_defaults
+    id: darwin
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+  - <<: *build_defaults
+    id: windows
+    goos:
+      - windows
+archives:
+  - name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    id: nix
+    builds: [linux, darwin]
+    format: tar.gz
+    files:
+      - none*
+  - name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    id: windows
+    builds: [windows]
+    format: zip
+    files:
+      - none*
+# source:
+#   enabled: true
+#   name_template: '{{ .ProjectName }}_{{ .Version }}_source_code'
+# sboms:
+#   - id: source
+#     artifacts: source
+#     documents:
+#       - "{{ .ProjectName }}_{{ .Version }}_sbom.spdx.json"
+# release:
+#   extra_files: []
+# checksum:
+#   extra_files: []
+# signs:
+#   - cmd: cosign
+#     env:
+#       - COSIGN_EXPERIMENTAL=1
+#     certificate: '${artifact}.pem'
+#     args:
+#       - sign-blob
+#       - "--yes"
+#       - '--output-certificate=${certificate}'
+#       - '--output-signature=${signature}'
+#       - '${artifact}'
+#     artifacts: checksum
+#     output: true
+brews:
+  - name: flamingo
+    tap:
+      owner: flux-subsystem-argo
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    folder: Formula
+    homepage: "https://flux-subsystem-argo.github.io/website/"
+    description: "Flamingo CLI"
+    install: |
+      bin.install "flamingo"
+
+      generate_completions_from_executable(bin/"flamingo", "completion")
+    test: |
+      system "#{bin}/flamingo --version"
