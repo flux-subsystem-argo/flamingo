@@ -38,6 +38,10 @@ jobs:
         run: |
           mkdir -p output
           echo '[CHANGELOG](https://github.com/flux-subsystem-argo/cli/blob/main/CHANGELOG.md)' > output/notes.md
+      - name: Get server version
+        id: get-server-version
+        run: |
+          echo "::set-output name=server-version::$(cat SERVER_VERSION)"
       - name: Run GoReleaser
         id: run-goreleaser
         uses: goreleaser/goreleaser-action@3fa32b8bb5620a2c1afe798654bbad59f9da4906 # v4.4.0
@@ -47,3 +51,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          SERVER_VERSION: ${{ steps.get-server-version.outputs.server-version }}

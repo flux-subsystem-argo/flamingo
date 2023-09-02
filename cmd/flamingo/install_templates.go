@@ -14,7 +14,7 @@ resources:
 images:
 - name: quay.io/argoproj/argocd:{{ .ArgoCD }}
   newName: ghcr.io/flux-subsystem-argo/fsa/argocd
-  newTag: {{ .Fsa }}
+  newTag: {{ .Image }}
 `
 
 const readonlyTemplate = `
@@ -60,5 +60,5 @@ patches:
 images:
 - name: quay.io/argoproj/argocd:{{ .ArgoCD }}
   newName: ghcr.io/flux-subsystem-argo/fsa/argocd
-  newTag: {{ .Fsa }}
+  newTag: {{ .Image }}
 `

@@ -4,7 +4,7 @@ builds:
       binary: flamingo
       main: ./cmd/flamingo
       ldflags:
-        - -s -w -X main.Version={{ .Version }}
+        - -s -w -X main.Version={{ .Version }} -X main.ServerVersion={{ .Env.SERVER_VERSION }}
       env:
         - CGO_ENABLED=0
     id: linux

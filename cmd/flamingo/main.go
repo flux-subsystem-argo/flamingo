@@ -20,6 +20,32 @@ var rootCmd = &cobra.Command{
 	SilenceUsage:  true,
 	SilenceErrors: true,
 	Short:         "CLI of Flamingo - the Flux Subsystem for Argo",
+	Long: `CLI of Flamingo - the Flux Subsystem for Argo
+
+# Install Flamingo in the argocd namespace
+flamingo install
+
+# Install Flamingo in the argocd namespace with the read-only mode enabled
+flamingo install --read-only-mode
+
+# Generate a Flamingo application from a Flux Kustomization podinfo in the current namespace (flux-system).
+# The generated application is put in the argocd namespace by default.
+flamingo generate-app ks/podinfo
+
+# Generate a Flamingo application from a Flux Kustomization podinfo in the podinfo namespace.
+# The generated application is put in the argocd namespace by default.
+flamingo generate-app -n podinfo ks/podinfo
+
+# Create a Flamingo application from a HelmRelease podinfo in the current namespace (flux-system).
+# The generated application is put in the argocd namespace by default.
+flamingo generate-app hr/podinfo
+
+# List all Flamingo applications in the given namespace
+flamingo get --namespace=default
+
+# List all Flamingo applications in all namespaces
+flamingo get --all-namespaces
+`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		ns, err := cmd.Flags().GetString("namespace")
 		if err != nil {

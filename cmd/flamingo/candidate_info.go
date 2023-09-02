@@ -1,9 +1,10 @@
 package main
 
 type Candidate struct {
-	ArgoCD string `json:"argocd"`
-	Fsa    string `json:"fsa"`
-	Flux   string `json:"flux"`
+	Flamingo string `json:"flamingo"`
+	ArgoCD   string `json:"argocd"`
+	Image    string `json:"image"`
+	Flux     string `json:"flux"`
 }
 
 type CandidateList struct {

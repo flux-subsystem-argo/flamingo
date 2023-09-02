@@ -31,7 +31,7 @@ var getCmdFlags struct {
 }
 
 func init() {
-	getCmd.Flags().BoolVarP(&getCmdFlags.all, "all", "A", false, "list all Flamingo applications in all namespaces")
+	getCmd.Flags().BoolVarP(&getCmdFlags.all, "all-namespaces", "A", false, "list all Flamingo applications in all namespaces")
 
 	rootCmd.AddCommand(getCmd)
 }
@@ -76,7 +76,7 @@ func getCmdRun(cmd *cobra.Command, args []string) error {
 	for _, item := range list.Items {
 		// Extract the necessary fields from the Unstructured object
 		// This is just an example, you'll need to adjust based on the actual structure of your Argo CD objects
-		appType := item.GetLabels()["flamingo/app-type"]
+		appType := item.GetLabels()["flamingo/workload-type"]
 		sourceType := item.GetLabels()["flamingo/source-type"]
 		objectNs := item.GetLabels()["flamingo/destination-namespace"]
 		status, err := extractStatus(&item)

@@ -29,29 +29,50 @@ flamingo install --version=%s
 
 # Install the Flux Subsystem for Argo with the read-only mode enabled
 flamingo install --version=%s --read-only-mode
-`, Version, Version),
+`, installFlags.version, installFlags.version),
 	RunE: installCmdRun,
 }
 
 var installFlags struct {
 	version      string
+	dev          bool
 	readOnlyMode bool
+	export       bool
 }
 
 func init() {
-	installCmd.Flags().StringVarP(&installFlags.version, "version", "v", Version, "version of Flamingo to install")
+	installCmd.Flags().StringVarP(&installFlags.version, "version", "v", ServerVersion, "version of Flamingo to install")
 	installCmd.Flags().BoolVar(&installFlags.readOnlyMode, "read-only-mode", false, "enable read-only mode")
+	installCmd.Flags().BoolVar(&installFlags.dev, "dev", false, "install development version")
+	installCmd.Flags().BoolVar(&installFlags.export, "export", false, "export manifests instead of installing")
 
 	rootCmd.AddCommand(installCmd)
 }
 
 func installCmdRun(cmd *cobra.Command, args []string) error {
+	if installFlags.export {
+		logger.stderr = io.Discard
+	}
+
 	if installFlags.version == "" {
 		return cmd.Help()
 	}
 	logger.Actionf("obtaining version info")
 
-	resp, err := http.Get(url)
+	client := &http.Client{}
+
+	// Create a new request
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return err
+	}
+
+	// Set headers to prevent caching
+	req.Header.Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	req.Header.Set("Pragma", "no-cache")
+
+	// Execute the request
+	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
@@ -68,9 +89,20 @@ func installCmdRun(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	// filter out .Flamingo that ends with -dev if --dev flag is not set
+	if !installFlags.dev {
+		var filteredCandidates []Candidate
+		for _, candidate := range candidates.Candidates {
+			if !isDev(candidate) {
+				filteredCandidates = append(filteredCandidates, candidate)
+			}
+		}
+		candidates.Candidates = filteredCandidates
+	}
+
 	var candidate *Candidate
 	for i, c := range candidates.Candidates {
-		if c.ArgoCD == installFlags.version {
+		if c.Flamingo == installFlags.version {
 			candidate = &candidates.Candidates[i]
 			break
 		}
@@ -79,12 +111,14 @@ func installCmdRun(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("version %s not found", installFlags.version)
 	}
 
-	if err := installFluxSubsystemForArgo(*candidate, installFlags.readOnlyMode); err != nil {
+	if err := installFluxSubsystemForArgo(*candidate, installFlags.readOnlyMode, installFlags.export); err != nil {
 		return err
 	}
 
-	if err := verifyTheInstallation(); err != nil {
-		return err
+	if !installFlags.export {
+		if err := verifyTheInstallation(); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -144,7 +178,7 @@ metadata:
   name: %s
 `
 
-func installFluxSubsystemForArgo(candidate Candidate, readOnlyMode bool) error {
+func installFluxSubsystemForArgo(candidate Candidate, readOnlyMode bool, export bool) error {
 	logger.Generatef("generating manifests")
 
 	tmpl := defaultTemplate
@@ -159,12 +193,14 @@ func installFluxSubsystemForArgo(candidate Candidate, readOnlyMode bool) error {
 	}
 
 	if err := t.Execute(&tpl, struct {
+		Flamingo  string
 		ArgoCD    string
-		Fsa       string
+		Image     string
 		Namespace string
 	}{
+		Flamingo:  candidate.Flamingo,
 		ArgoCD:    candidate.ArgoCD,
-		Fsa:       candidate.Fsa,
+		Image:     candidate.Image,
 		Namespace: rootArgs.applicationNamespace,
 	}); err != nil {
 		return err
@@ -189,6 +225,11 @@ func installFluxSubsystemForArgo(candidate Candidate, readOnlyMode bool) error {
 		return err
 	}
 	logger.Successf("manifests build completed")
+
+	if export {
+		fmt.Println(string(yamlOutput))
+		return nil
+	}
 
 	logger.Actionf("installing components in %s namespace", rootArgs.applicationNamespace)
 	applyOutput, err := utils.Apply(context.Background(), kubeconfigArgs, kubeclientOptions, yamlOutput)

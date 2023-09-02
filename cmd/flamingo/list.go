@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"text/tabwriter"
 
 	"github.com/spf13/cobra"
@@ -19,12 +20,31 @@ var listCmd = &cobra.Command{
 	RunE:  listCmdRun,
 }
 
+var listFlags struct {
+	dev bool
+}
+
 func init() {
+	listCmd.Flags().BoolVar(&listFlags.dev, "dev", false, "list development candidates")
+
 	rootCmd.AddCommand(listCmd)
 }
 
 func listCmdRun(cmd *cobra.Command, args []string) error {
-	resp, err := http.Get(url)
+	client := &http.Client{}
+
+	// Create a new request
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return err
+	}
+
+	// Set headers to prevent caching
+	req.Header.Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	req.Header.Set("Pragma", "no-cache")
+
+	// Execute the request
+	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
@@ -46,9 +66,16 @@ func listCmdRun(cmd *cobra.Command, args []string) error {
 
 	fmt.Fprintln(w, "FLAMINGO\tFSA-IMAGE\tSUPPORTED FLUX")
 	for _, candidate := range candidates.Candidates {
-		fmt.Fprintf(w, "%s\t%s\t%s\n", candidate.ArgoCD, candidate.Fsa, candidate.Flux)
+		if !listFlags.dev && isDev(candidate) {
+			continue
+		}
+		fmt.Fprintf(w, "%s\t%s\t%s\n", candidate.Flamingo, candidate.Image, candidate.Flux)
 	}
 	w.Flush()
 
 	return nil
+}
+
+func isDev(candidate Candidate) bool {
+	return strings.HasSuffix(candidate.Flamingo, "-dev")
 }

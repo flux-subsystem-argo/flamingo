@@ -1,9 +1,10 @@
 # Constants
-FLAMINGO_VERSION := v2.8.1
+CLI_VERSION      := dev
+FLAMINGO_VERSION := $(shell cat SERVER_VERSION)
 BINARY_NAME      := flamingo
 BIN_DIR          := bin
 CMD_DIR          := ./cmd/$(BINARY_NAME)/
-BUILD_FLAGS      := -ldflags="-s -w -X main.Version=$(FLAMINGO_VERSION)"
+BUILD_FLAGS      := -ldflags="-s -w -X main.Version=$(CLI_VERSION) -X main.ServerVersion=$(FLAMINGO_VERSION)"
 OUTPUT_PATH      := $(BIN_DIR)/$(BINARY_NAME)
 
 build:
