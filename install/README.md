@@ -1,6 +1,6 @@
 # flamingo CLI installation
 
-```
+```bash
 curl -sL https://bit.ly/flamingo-cli | sudo bash
 ```
 
