@@ -36,7 +36,7 @@ spec:
   source:
     path: {{ .Path }}
     repoURL: {{ .SourceURL }}
-    targetRevision: {{ .SourceRevision }}
+    targetRevision: "{{ .SourceRevision }}"
   syncPolicy:
     syncOptions:
     - ApplyOutOfSyncOnly=true
