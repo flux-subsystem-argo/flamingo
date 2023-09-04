@@ -1,4 +1,4 @@
-# Getting Started 
+# Getting Started
 
 ```bash
 kind create cluster
@@ -27,9 +27,13 @@ metadata:
   namespace: podinfo-kustomize
 spec:
   interval: 10m
-  url: oci://ghcr.io/stefanprodan/manifests/podinfo
+  url: oci://ghcr.io/stefanprodan/podinfo-deploy
   ref:
-    tag: latest
+    semver: "*"
+  verify:
+    provider: cosign
+    secretRef:
+      name: cosign-pub
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -48,7 +52,7 @@ EOF
 ```
 
 ```shell
-flamingo generate-app -n podinfo-kustomize ks/podinfo --app-name=podinfo-ks 
+flamingo generate-app --app-name=podinfo-ks -n podinfo-kustomize ks/podinfo
 ```
 
 ```shell
@@ -84,9 +88,25 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: podinfo
+      verify:
+        provider: cosign # keyless
 EOF
 ```
 
 ```shell
-flamingo generate-app -n podinfo-helm hr/podinfo --app-name=podinfo-hr 
+flamingo generate-app --app-name=podinfo-hr -n podinfo-helm hr/podinfo
+```
+
+```shell
+wget https://raw.githubusercontent.com/stefanprodan/podinfo/master/.cosign/cosign.pub
+
+kubectl -n podinfo-kustomize create secret generic cosign-pub \
+  --from-file=cosign.pub=cosign.pub
+
+kubectl -n podinfo-helm create secret generic cosign-pub \
+  --from-file=cosign.pub=cosign.pub
+```
+
+```shell
+flamingo show-init-password
 ```
