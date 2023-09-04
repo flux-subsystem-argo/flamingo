@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+
 	"github.com/flux-subsystem-argo/cli/pkg/utils"
 	"github.com/spf13/cobra"
 	corev1 "k8s.io/api/core/v1"
@@ -11,8 +12,9 @@ import (
 )
 
 var showInitPasswordCmd = &cobra.Command{
-	Use:   "show-init-password",
-	Short: "Show the init password",
+	Use:     "show-init-password",
+	Aliases: []string{"show-init-pass", "show-init-pwd"},
+	Short:   "Show the init password",
 	Long: `
 # Show the init password
 flamingo show-init-password
