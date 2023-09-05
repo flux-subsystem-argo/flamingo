@@ -101,6 +101,11 @@ flamingo generate-app --app-name=podinfo-hr -n podinfo-helm hr/podinfo
 wget https://raw.githubusercontent.com/stefanprodan/podinfo/master/.cosign/cosign.pub
 
 kubectl -n podinfo-kustomize create secret generic cosign-pub \
+  --from-file=cosign.pub=cosign_wrong.pub
+
+kubectl delete secrets/cosign-pub -n podinfo-kustomize
+
+kubectl -n podinfo-kustomize create secret generic cosign-pub \
   --from-file=cosign.pub=cosign.pub
 
 kubectl -n podinfo-helm create secret generic cosign-pub \
@@ -109,4 +114,46 @@ kubectl -n podinfo-helm create secret generic cosign-pub \
 
 ```shell
 flamingo show-init-password
+```
+
+```yaml
+cat <<EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    app.kubernetes.io/component: monitoring
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: prometheus-community
+  namespace: monitoring
+spec:
+  interval: 12h
+  type: oci
+  url: oci://ghcr.io/prometheus-community/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: monitoring
+spec:
+  interval: 1h
+  chart:
+    spec:
+      version: "48.x"
+      chart: kube-prometheus-stack
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+      interval: 1h
+  install:
+    crds: Create
+  upgrade:
+    crds: CreateReplace
+EOF
 ```

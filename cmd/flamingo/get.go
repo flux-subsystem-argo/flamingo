@@ -9,7 +9,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"os"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"strings"
 	"text/tabwriter"
 )
 
@@ -87,8 +86,7 @@ func getCmdRun(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			message = err.Error()
 		}
-		if len(message) > 50 {
-			message = strings.TrimPrefix(message, "ReconciliationSucceeded - ")
+		if len(message) > 40 {
 			message = message[:40] + " ..."
 		}
 		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
