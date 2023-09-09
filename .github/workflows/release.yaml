@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  release-flux-cli:
+  release-flamingo-cli:
     outputs:
       hashes: ${{ steps.slsa.outputs.hashes }}
       image_url: ${{ steps.slsa.outputs.image_url }}
