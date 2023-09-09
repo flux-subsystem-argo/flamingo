@@ -43,7 +43,7 @@ spec:
     - FluxSubsystem=true
 `
 
-func generateKustomizationApp(appName, objectName string, c client.Client, kindName string, tpl *bytes.Buffer) error {
+func generateKustomizationApp(c client.Client, appName, objectName string, kindName string, tpl *bytes.Buffer) error {
 	object := kustomizev1.Kustomization{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      objectName,

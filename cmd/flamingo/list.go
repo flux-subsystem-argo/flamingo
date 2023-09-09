@@ -14,20 +14,20 @@ import (
 
 const url = "https://raw.githubusercontent.com/flux-subsystem-argo/index/main/index.json"
 
-var listCmd = &cobra.Command{
-	Use:   "list",
+var listCandidates = &cobra.Command{
+	Use:   "list-candidates",
 	Short: "List candidates",
 	RunE:  listCmdRun,
 }
 
-var listFlags struct {
+var listCandidatesFlags struct {
 	dev bool
 }
 
 func init() {
-	listCmd.Flags().BoolVar(&listFlags.dev, "dev", false, "list development candidates")
+	listCandidates.Flags().BoolVar(&listCandidatesFlags.dev, "dev", false, "list development candidates")
 
-	rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(listCandidates)
 }
 
 func listCmdRun(cmd *cobra.Command, args []string) error {
@@ -66,7 +66,7 @@ func listCmdRun(cmd *cobra.Command, args []string) error {
 
 	fmt.Fprintln(w, "FLAMINGO\tFSA-IMAGE\tSUPPORTED FLUX")
 	for _, candidate := range candidates.Candidates {
-		if !listFlags.dev && isDev(candidate) {
+		if !listCandidatesFlags.dev && isDev(candidate) {
 			continue
 		}
 		fmt.Fprintf(w, "%s\t%s\t%s\n", candidate.Flamingo, candidate.Image, candidate.Flux)

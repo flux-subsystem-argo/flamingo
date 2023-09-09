@@ -44,7 +44,7 @@ spec:
     - FluxSubsystem=true
 `
 
-func generateHelmReleaseApp(appName, objectName string, c client.Client, kindName string, tpl *bytes.Buffer) error {
+func generateHelmReleaseApp(c client.Client, appName, objectName string, kindName string, tpl *bytes.Buffer) error {
 	object := helmv2b1.HelmRelease{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      objectName,

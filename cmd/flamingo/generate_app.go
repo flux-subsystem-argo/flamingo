@@ -10,9 +10,7 @@ import (
 	"github.com/flux-subsystem-argo/cli/pkg/utils"
 	helmv2b1 "github.com/fluxcd/helm-controller/api/v2beta1"
 	kustomizev1 "github.com/fluxcd/kustomize-controller/api/v1"
-	runtimeclient "github.com/fluxcd/pkg/runtime/client"
 	"github.com/spf13/cobra"
-	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 var generateAppCmd = &cobra.Command{
@@ -50,16 +48,7 @@ func init() {
 }
 
 func generateAppCmdRun(_ *cobra.Command, args []string) error {
-	kubeConfig, err := utils.KubeConfig(kubeconfigArgs, kubeclientOptions)
-	if err != nil {
-		return err
-	}
-
-	restMapper, err := runtimeclient.NewDynamicRESTMapper(kubeConfig)
-	if err != nil {
-		return err
-	}
-	c, err := client.New(kubeConfig, client.Options{Mapper: restMapper, Scheme: utils.NewScheme()})
+	cli, err := utils.KubeClient(kubeconfigArgs, kubeclientOptions)
 	if err != nil {
 		return err
 	}
@@ -103,11 +92,11 @@ func generateAppCmdRun(_ *cobra.Command, args []string) error {
 
 	var tpl bytes.Buffer
 	if kindName == kustomizev1.KustomizationKind {
-		if err := generateKustomizationApp(appName, objectName, c, kindName, &tpl); err != nil {
+		if err := generateKustomizationApp(cli, appName, objectName, kindName, &tpl); err != nil {
 			return err
 		}
 	} else if kindName == helmv2b1.HelmReleaseKind {
-		if err := generateHelmReleaseApp(appName, objectName, c, kindName, &tpl); err != nil {
+		if err := generateHelmReleaseApp(cli, appName, objectName, kindName, &tpl); err != nil {
 			return err
 		}
 	}

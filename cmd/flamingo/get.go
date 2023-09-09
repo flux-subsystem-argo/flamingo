@@ -36,18 +36,11 @@ func init() {
 }
 
 func getCmdRun(cmd *cobra.Command, args []string) error {
-	cfg, err := utils.KubeConfig(kubeconfigArgs, kubeclientOptions)
+	cli, err := utils.KubeClient(kubeconfigArgs, kubeclientOptions)
 	if err != nil {
 		return err
 	}
-	restMapper, err := kubeconfigArgs.ToRESTMapper()
-	if err != nil {
-		return err
-	}
-	cli, err := client.New(cfg, client.Options{Mapper: restMapper})
-	if err != nil {
-		return err
-	}
+
 	gvk := schema.GroupVersionKind{
 		Group:   "argoproj.io",
 		Version: "v1alpha1",
@@ -71,13 +64,13 @@ func getCmdRun(cmd *cobra.Command, args []string) error {
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 	fmt.Fprintln(w, "NAMESPACE\tAPP-NS\tAPP\tFLUX-TYPE\tSOURCE-TYPE\tSTATUS\tMESSAGE")
-
 	for _, item := range list.Items {
+		labels := item.GetLabels()
 		// Extract the necessary fields from the Unstructured object
 		// This is just an example, you'll need to adjust based on the actual structure of your Argo CD objects
-		appType := item.GetLabels()["flamingo/workload-type"]
-		sourceType := item.GetLabels()["flamingo/source-type"]
-		objectNs := item.GetLabels()["flamingo/destination-namespace"]
+		appType := labels["flamingo/workload-type"]
+		sourceType := labels["flamingo/source-type"]
+		objectNs := labels["flamingo/destination-namespace"]
 		status, err := extractStatus(&item)
 		if err != nil {
 			status = err.Error()
