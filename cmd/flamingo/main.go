@@ -21,12 +21,23 @@ var rootCmd = &cobra.Command{
 	SilenceErrors: true,
 	Short:         "CLI of Flamingo - the Flux Subsystem for Argo",
 	Long: `CLI of Flamingo - the Flux Subsystem for Argo
+# List all Flamingo candidates
+flamingo list-candidates
+
+# List all Flamingo candidates including development versions
+flamingo list-candidates --dev
 
 # Install Flamingo in the argocd namespace
 flamingo install
 
 # Install Flamingo in the argocd namespace with the read-only mode enabled
 flamingo install --read-only-mode
+
+# Install Flamingo in the argocd namespace with the development version
+flamingo install --dev --version=v2.8.3-dev
+
+# Show initial password for the admin user
+flamingo show-init-password
 
 # Generate a Flamingo application from a Flux Kustomization podinfo in the current namespace (flux-system).
 # The generated application is put in the argocd namespace by default.

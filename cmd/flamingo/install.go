@@ -213,7 +213,9 @@ func installFluxSubsystemForArgo(candidate Candidate, readOnlyMode bool, export 
 	namespacePath := "/app/namespace.yaml"
 	fSys.WriteFile(namespacePath, []byte(fmt.Sprintf(namespaceTemplate, rootArgs.applicationNamespace)))
 
-	k := krusty.MakeKustomizer(krusty.MakeDefaultOptions())
+	opts := krusty.MakeDefaultOptions()
+	opts.Reorder = krusty.ReorderOptionLegacy
+	k := krusty.MakeKustomizer(opts)
 
 	m, err := k.Run(fSys, "/app")
 	if err != nil {

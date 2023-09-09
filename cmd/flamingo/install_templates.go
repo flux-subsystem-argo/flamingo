@@ -9,8 +9,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: {{ .Namespace }}
 resources:
-- "https://raw.githubusercontent.com/argoproj/argo-cd/{{ .ArgoCD }}/manifests/install.yaml"
 - namespace.yaml
+- "https://raw.githubusercontent.com/argoproj/argo-cd/{{ .ArgoCD }}/manifests/install.yaml"
 images:
 - name: quay.io/argoproj/argocd:{{ .ArgoCD }}
   newName: ghcr.io/flux-subsystem-argo/fsa/argocd
@@ -22,8 +22,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: {{ .Namespace }}
 resources:
-- "https://raw.githubusercontent.com/argoproj/argo-cd/{{ .ArgoCD }}/manifests/install.yaml"
 - namespace.yaml
+- "https://raw.githubusercontent.com/argoproj/argo-cd/{{ .ArgoCD }}/manifests/install.yaml"
 patches:
 - patch: |-
     apiVersion: v1
