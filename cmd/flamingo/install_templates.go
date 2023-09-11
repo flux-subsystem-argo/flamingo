@@ -4,7 +4,7 @@ package main
 // - the ArgoCD controllers
 // - the Flamingo controller
 
-const defaultTemplate = `
+const allInstallTemplate = `
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: {{ .Namespace }}
@@ -15,15 +15,34 @@ images:
 - name: quay.io/argoproj/argocd:{{ .ArgoCD }}
   newName: ghcr.io/flux-subsystem-argo/fsa/argocd
   newTag: {{ .Image }}
+{{ .AnonymousPatches }}
 `
 
-const readonlyTemplate = `
+const crdsOnlyInstallTemplate = `
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- "https://raw.githubusercontent.com/argoproj/argo-cd/{{ .ArgoCD }}/manifests/crds/application-crd.yaml"
+- "https://raw.githubusercontent.com/argoproj/argo-cd/{{ .ArgoCD }}/manifests/crds/applicationset-crd.yaml"
+- "https://raw.githubusercontent.com/argoproj/argo-cd/{{ .ArgoCD }}/manifests/crds/appproject-crd.yaml"
+`
+
+const namespaceInstallTemplate = `
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: {{ .Namespace }}
 resources:
 - namespace.yaml
-- "https://raw.githubusercontent.com/argoproj/argo-cd/{{ .ArgoCD }}/manifests/install.yaml"
+- "https://raw.githubusercontent.com/argoproj/argo-cd/{{ .ArgoCD }}/manifests/namespace-install.yaml"
+- cluster.yaml
+images:
+- name: quay.io/argoproj/argocd:{{ .ArgoCD }}
+  newName: ghcr.io/flux-subsystem-argo/fsa/argocd
+  newTag: {{ .Image }}
+{{ .AnonymousPatches }}
+`
+
+const anonymousPatches = `
 patches:
 - patch: |-
     apiVersion: v1
@@ -57,8 +76,46 @@ patches:
   target:
     kind: ConfigMap
     name: argocd-rbac-cm
-images:
-- name: quay.io/argoproj/argocd:{{ .ArgoCD }}
-  newName: ghcr.io/flux-subsystem-argo/fsa/argocd
-  newTag: {{ .Image }}
+`
+
+var namespaceTemplate = `
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: %s
+`
+
+const defaultClusterSecretTemplate = `
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cluster-kubernetes.default.svc
+  namespace: %s
+  annotations:
+    managed-by: argocd.argoproj.io
+  labels:
+    argocd.argoproj.io/secret-type: cluster
+type: Opaque
+stringData:
+  config: '{"tlsClientConfig":{"insecure":false}}'
+  name: in-cluster
+  namespaces: %s
+  server: https://kubernetes.default.svc
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: %s
+  name: flamingo-reconciler
+  namespace: %s
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: argocd-application-controller
+  namespace: %s
 `

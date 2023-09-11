@@ -21,22 +21,28 @@ var rootCmd = &cobra.Command{
 	SilenceErrors: true,
 	Short:         "CLI of Flamingo - the Flux Subsystem for Argo",
 	Long: `CLI of Flamingo - the Flux Subsystem for Argo
-# List all Flamingo candidates
+# List all Flamingo candidates.
 flamingo list-candidates
 
-# List all Flamingo candidates including development versions
+# List all Flamingo candidates including development versions.
 flamingo list-candidates --dev
 
-# Install Flamingo in the argocd namespace
+# Install Flamingo in the argocd namespace.
 flamingo install
 
-# Install Flamingo in the argocd namespace with the read-only mode enabled
-flamingo install --read-only-mode
+# Install Flamingo in the argocd namespace with the anonymous UI enabled.
+flamingo install --anonymous
 
-# Install Flamingo in the argocd namespace with the development version
+# Install Flamingo in the argocd namespace with the development version.
 flamingo install --dev --version=v2.8.3-dev
 
-# Show initial password for the admin user
+# Install CRDs only at the cluster level. Required only once per cluster before installing Flamingo tenants.
+flamingo install --mode=crds-only
+
+# Install Flamingo in the Tenant mode in the dev-team namespace (requires the CRDs to be installed first).
+flamingo install --app-ns=dev-team --mode=tenant
+
+# Show initial password for the admin user.
 flamingo show-init-password
 
 # Generate a Flamingo application from a Flux Kustomization podinfo in the current namespace (flux-system).
@@ -47,9 +53,17 @@ flamingo generate-app ks/podinfo
 # The generated application is put in the argocd namespace by default.
 flamingo generate-app -n podinfo ks/podinfo
 
-# Create a Flamingo application from a HelmRelease podinfo in the current namespace (flux-system).
+# Generate a Flamingo application from a HelmRelease podinfo in the current namespace (flux-system).
 # The generated application is put in the argocd namespace by default.
 flamingo generate-app hr/podinfo
+
+# Generate a Flamingo application (Tenant mode) from a Flux Kustomization podinfo in the dev-team namespace.
+# The generated application is put in the dev-team namespace.
+flamingo generate-app \
+  --app-ns=dev-team \
+  -n dev-team \
+  --app-name=dev-team-podinfo \
+  ks/podinfo
 
 # List all Flamingo applications in the given namespace
 flamingo get --namespace=default
@@ -92,7 +106,7 @@ var (
 func init() {
 	rootCmd.PersistentFlags().DurationVar(&rootArgs.timeout, "timeout", 5*time.Minute, "timeout for this operation")
 	rootCmd.PersistentFlags().BoolVar(&rootArgs.verbose, "verbose", false, "print generated objects")
-	rootCmd.PersistentFlags().StringVar(&rootArgs.applicationNamespace, "application-namespace", defaultApplicationName, "namespace where the ArgoCD application is installed")
+	rootCmd.PersistentFlags().StringVarP(&rootArgs.applicationNamespace, "app-ns", "N", defaultApplicationName, "namespace where Flamingo and applications are located")
 
 	configureDefaultNamespace()
 	kubeconfigArgs.APIServer = nil // prevent AddFlags from configuring --server flag

@@ -27,22 +27,34 @@ var installCmd = &cobra.Command{
 # Install the Flux Subsystem for Argo
 flamingo install --version=%s
 
-# Install the Flux Subsystem for Argo with the read-only mode enabled
-flamingo install --version=%s --read-only-mode
+# Install the Flux Subsystem for Argo with the anonymous UI enabled
+flamingo install --version=%s --anonymous
 `, installFlags.version, installFlags.version),
 	RunE: installCmdRun,
 }
 
 var installFlags struct {
-	version      string
-	dev          bool
-	readOnlyMode bool
-	export       bool
+	version   string
+	dev       bool
+	anonymous bool
+	export    bool
+	mode      string
+}
+
+const CRDsOnlyMode = "crds-only"
+const AllMode = "all"
+const TenantMode = "tenant"
+
+var validModes = map[string]bool{
+	CRDsOnlyMode: true,
+	AllMode:      true,
+	TenantMode:   true,
 }
 
 func init() {
 	installCmd.Flags().StringVarP(&installFlags.version, "version", "v", ServerVersion, "version of Flamingo to install")
-	installCmd.Flags().BoolVar(&installFlags.readOnlyMode, "read-only-mode", false, "enable read-only mode")
+	installCmd.Flags().BoolVar(&installFlags.anonymous, "anonymous", false, "enable anonymous UI")
+	installCmd.Flags().StringVar(&installFlags.mode, "mode", AllMode, "installation mode [crds-only, all, tenant]")
 	installCmd.Flags().BoolVar(&installFlags.dev, "dev", false, "install development version")
 	installCmd.Flags().BoolVar(&installFlags.export, "export", false, "export manifests instead of installing")
 
@@ -50,6 +62,10 @@ func init() {
 }
 
 func installCmdRun(cmd *cobra.Command, args []string) error {
+	if _, valid := validModes[installFlags.mode]; !valid {
+		return fmt.Errorf("invalid mode: %s", installFlags.mode)
+	}
+
 	if installFlags.export {
 		logger.stderr = io.Discard
 	}
@@ -111,11 +127,13 @@ func installCmdRun(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("version %s not found", installFlags.version)
 	}
 
-	if err := installFluxSubsystemForArgo(*candidate, installFlags.readOnlyMode, installFlags.export); err != nil {
+	if err := installFluxSubsystemForArgo(*candidate, installFlags.mode, installFlags.anonymous, installFlags.export); err != nil {
 		return err
 	}
 
-	if !installFlags.export {
+	if installFlags.export || installFlags.mode == CRDsOnlyMode {
+		// do not verify the installation if we are exporting the manifests or installing CRDs only
+	} else {
 		if err := verifyTheInstallation(); err != nil {
 			return err
 		}
@@ -171,19 +189,22 @@ func verifyTheInstallation() error {
 	return nil
 }
 
-var namespaceTemplate = `
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: %s
-`
-
-func installFluxSubsystemForArgo(candidate Candidate, readOnlyMode bool, export bool) error {
+func installFluxSubsystemForArgo(candidate Candidate, installMode string, anonymous bool, export bool) error {
 	logger.Generatef("generating manifests")
 
-	tmpl := defaultTemplate
-	if readOnlyMode {
-		tmpl = readonlyTemplate
+	var tmpl string
+	switch installMode {
+	case AllMode:
+		tmpl = allInstallTemplate
+	case CRDsOnlyMode:
+		tmpl = crdsOnlyInstallTemplate
+	case TenantMode:
+		tmpl = namespaceInstallTemplate
+	}
+
+	patches := ""
+	if anonymous {
+		patches = anonymousPatches
 	}
 
 	var tpl bytes.Buffer
@@ -193,15 +214,17 @@ func installFluxSubsystemForArgo(candidate Candidate, readOnlyMode bool, export 
 	}
 
 	if err := t.Execute(&tpl, struct {
-		Flamingo  string
-		ArgoCD    string
-		Image     string
-		Namespace string
+		Flamingo         string
+		ArgoCD           string
+		Image            string
+		Namespace        string
+		AnonymousPatches string
 	}{
-		Flamingo:  candidate.Flamingo,
-		ArgoCD:    candidate.ArgoCD,
-		Image:     candidate.Image,
-		Namespace: rootArgs.applicationNamespace,
+		Flamingo:         candidate.Flamingo,
+		ArgoCD:           candidate.ArgoCD,
+		Image:            candidate.Image,
+		Namespace:        rootArgs.applicationNamespace,
+		AnonymousPatches: patches,
 	}); err != nil {
 		return err
 	}
@@ -210,8 +233,27 @@ func installFluxSubsystemForArgo(candidate Candidate, readOnlyMode bool, export 
 	fSys := filesys.MakeFsInMemory()
 	kustomizationPath := "/app/kustomization.yaml"
 	fSys.WriteFile(kustomizationPath, tpl.Bytes())
+
 	namespacePath := "/app/namespace.yaml"
-	fSys.WriteFile(namespacePath, []byte(fmt.Sprintf(namespaceTemplate, rootArgs.applicationNamespace)))
+	if installMode == CRDsOnlyMode {
+		fSys.WriteFile(namespacePath, []byte("# empty"))
+	} else {
+		fSys.WriteFile(namespacePath, []byte(fmt.Sprintf(namespaceTemplate, rootArgs.applicationNamespace)))
+	}
+
+	clusterPath := "/app/cluster.yaml"
+	if installMode == TenantMode {
+		fSys.WriteFile(clusterPath, []byte(
+			fmt.Sprintf(defaultClusterSecretTemplate,
+				rootArgs.applicationNamespace,
+				rootArgs.applicationNamespace,
+				rootArgs.applicationNamespace,
+				rootArgs.applicationNamespace,
+				rootArgs.applicationNamespace,
+			)))
+	} else {
+		fSys.WriteFile(clusterPath, []byte("# empty"))
+	}
 
 	opts := krusty.MakeDefaultOptions()
 	opts.Reorder = krusty.ReorderOptionLegacy
@@ -233,7 +275,13 @@ func installFluxSubsystemForArgo(candidate Candidate, readOnlyMode bool, export 
 		return nil
 	}
 
-	logger.Actionf("installing components in %s namespace", rootArgs.applicationNamespace)
+	if installMode == CRDsOnlyMode {
+		// install CRDs only
+		logger.Actionf("installing CRDs only")
+	} else {
+		// install everything
+		logger.Actionf("installing components in %s namespace", rootArgs.applicationNamespace)
+	}
 	applyOutput, err := utils.Apply(context.Background(), kubeconfigArgs, kubeclientOptions, yamlOutput)
 	if err != nil {
 		return fmt.Errorf("install failed: %w", err)

@@ -11,6 +11,7 @@ flux install
 ```bash
 flamingo install
 ```
+---
 
 ```bash
 cat << EOF | kubectl apply -f -
@@ -27,9 +28,10 @@ metadata:
   namespace: podinfo-kustomize
 spec:
   interval: 10m
-  url: oci://ghcr.io/stefanprodan/podinfo-deploy
+  url: oci://ghcr.io/stefanprodan/podinfo-deploy # oci://ghcr.io/stefanprodan/manifests/podinfo
   ref:
     semver: "*"
+    # tag: latest
   verify:
     provider: cosign
     secretRef:
