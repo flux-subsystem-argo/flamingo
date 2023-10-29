@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"text/template"
 	"time"
 
@@ -55,7 +56,6 @@ func init() {
 	installCmd.Flags().StringVarP(&installFlags.version, "version", "v", ServerVersion, "version of Flamingo to install")
 	installCmd.Flags().BoolVar(&installFlags.anonymous, "anonymous", false, "enable anonymous UI")
 	installCmd.Flags().StringVar(&installFlags.mode, "mode", AllMode, "installation mode [crds-only, all, tenant]")
-	installCmd.Flags().BoolVar(&installFlags.dev, "dev", false, "install development version")
 	installCmd.Flags().BoolVar(&installFlags.export, "export", false, "export manifests instead of installing")
 
 	rootCmd.AddCommand(installCmd)
@@ -73,6 +73,10 @@ func installCmdRun(cmd *cobra.Command, args []string) error {
 	if installFlags.version == "" {
 		return cmd.Help()
 	}
+	if strings.HasSuffix(installFlags.version, "-dev") {
+		installFlags.dev = true
+	}
+
 	logger.Actionf("obtaining version info")
 
 	client := &http.Client{}

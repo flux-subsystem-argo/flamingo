@@ -28,6 +28,42 @@ metadata:
   namespace: podinfo-kustomize
 spec:
   interval: 10m
+  url: oci://ghcr.io/stefanprodan/manifests/podinfo
+  ref:
+    tag: latest
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: podinfo
+  namespace: podinfo-kustomize
+spec:
+  interval: 10m
+  targetNamespace: podinfo-kustomize
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: podinfo
+  path: ./
+EOF
+```
+
+Verifiable OCI image:
+```bash
+cat << EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: podinfo-kustomize
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: podinfo
+  namespace: podinfo-kustomize
+spec:
+  interval: 10m
   url: oci://ghcr.io/stefanprodan/podinfo-deploy # oci://ghcr.io/stefanprodan/manifests/podinfo
   ref:
     semver: "*"

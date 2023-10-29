@@ -79,7 +79,10 @@ flux install
 Install **Flamingo**
 
 ```shell
-flamingo install --version=v2.8.3
+flamingo install
+
+# or with a specific version
+flamingo install --version=v2.8.4
 ```
 
 Create a **Flux Kustomization**
@@ -128,13 +131,14 @@ flamingo generate-app \
 ```
 
 Like a normal Argo CD instance, please firstly obtain the initial password by running the following command to login.
-The default user name is `admin`.
+The default username is `admin`.
 
 ```shell
 flamingo show-init-password
 ```
 
 After that you can port forward and open your browser to http://localhost:8080
-```
+
+```shell
 kubectl -n argocd port-forward svc/argocd-server 8080:443
 ```

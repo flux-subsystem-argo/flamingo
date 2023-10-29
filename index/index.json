@@ -1,0 +1,76 @@
+{
+  "candidates": [
+    {
+      "flamingo": "v2.9.0-rc3-dev",
+      "argocd": "v2.9.0-rc3",
+      "image": "v2.9.0-rc3-fl.21-main-1fecd6b1",
+      "flux": "v2.1.2"
+    },
+    {
+      "flamingo": "v2.8.5-dev",
+      "argocd": "v2.8.5",
+      "image": "v2.8.5-fl.21-main-2670d8c2",
+      "flux": "v2.1.2"
+    },
+    {
+      "flamingo": "v2.8.4",
+      "argocd": "v2.8.4",
+      "image": "v2.8.4-fl.21-main-6c72e98c",
+      "flux": "v2.1.1"
+    },
+    {
+      "flamingo": "v2.8.3",
+      "argocd": "v2.8.3",
+      "image": "v2.8.3-fl.21-main-3155e06d",
+      "flux": "v2.1.0"
+    },
+    {
+      "flamingo": "v2.8.1",
+      "argocd": "v2.8.1",
+      "image": "v2.8.1-fl.21-main-7242d1b4",
+      "flux": "v2.1.0"
+    },
+    {
+      "flamingo": "v2.7.14",
+      "argocd": "v2.7.14",
+      "image": "v2.7.14-fl.15-main-79945e4b",
+      "flux": "v2.0.1"
+    },
+    {
+      "flamingo": "v2.7.12",
+      "argocd": "v2.7.12",
+      "image": "v2.7.12-fl.15-main-1072aa5e",
+      "flux": "v2.0.1"
+    },
+    {
+      "flamingo": "v2.8.0",
+      "argocd": "v2.8.0",
+      "image": "v2.8.0-fl.15-main-aef83705",
+      "flux": "v2.0.1"
+    },
+    {
+      "flamingo": "v2.7.11",
+      "argocd": "v2.7.11",
+      "image": "v2.7.11-fl.15-main-32b9702c",
+      "flux": "v2.0.1"
+    },
+    {
+      "flamingo": "v2.6.15",
+      "argocd": "v2.6.15",
+      "image": "v2.6.15-fl.15-main-10ea1bf3",
+      "flux": "v2.0.1"
+    },
+    {
+      "flamingo": "v2.6.14",
+      "argocd": "v2.6.14",
+      "image": "v2.6.14-fl.15-main-e9a0660c",
+      "flux": "v2.0.1"
+    },
+    {
+      "flamingo": "v2.5.22",
+      "argocd": "v2.5.22",
+      "image": "v2.5.22-fl.12-main-0f9b4dbc",
+      "flux": "v0.41.2"
+    }
+  ]
+}

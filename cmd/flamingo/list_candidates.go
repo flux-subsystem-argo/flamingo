@@ -12,12 +12,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const url = "https://raw.githubusercontent.com/flux-subsystem-argo/index/main/index.json"
+const url = "https://raw.githubusercontent.com/flux-subsystem-argo/cli/main/index/index.json"
 
 var listCandidates = &cobra.Command{
-	Use:   "list-candidates",
-	Short: "List candidates",
-	RunE:  listCmdRun,
+	Use:     "list-candidates",
+	Short:   "List candidates",
+	Aliases: []string{"lc"},
+	RunE:    listCmdRun,
 }
 
 var listCandidatesFlags struct {
