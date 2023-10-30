@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/flux-subsystem-argo/cli/pkg/utils"
+	"github.com/flux-subsystem-argo/flamingo/pkg/utils"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"

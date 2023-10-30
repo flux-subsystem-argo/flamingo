@@ -12,7 +12,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/flux-subsystem-argo/cli/pkg/utils"
+	"github.com/flux-subsystem-argo/flamingo/pkg/utils"
 	"github.com/fluxcd/flux2/v2/pkg/status"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/runtime/schema"

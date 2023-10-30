@@ -37,7 +37,7 @@ jobs:
       - name: Generate release manifests
         run: |
           mkdir -p output
-          echo '[CHANGELOG](https://github.com/flux-subsystem-argo/cli/blob/main/CHANGELOG.md)' > output/notes.md
+          echo '[CHANGELOG](https://github.com/flux-subsystem-argo/flamingo/blob/main/CHANGELOG.md)' > output/notes.md
       - name: Get server version
         id: get-server-version
         run: |

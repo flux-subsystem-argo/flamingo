@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/flux-subsystem-argo/cli/pkg/utils"
+	"github.com/flux-subsystem-argo/flamingo/pkg/utils"
 	helmv2b1 "github.com/fluxcd/helm-controller/api/v2beta1"
 	kustomizev1 "github.com/fluxcd/kustomize-controller/api/v1"
 	"github.com/spf13/cobra"

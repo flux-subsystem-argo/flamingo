@@ -1,4 +1,4 @@
-module github.com/flux-subsystem-argo/cli
+module github.com/flux-subsystem-argo/flamingo
 
 go 1.20
 

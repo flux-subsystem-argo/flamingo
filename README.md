@@ -1,6 +1,6 @@
 # Flamingo - the Flux Subsystem for Argo
 
-> 🚀🚀🚀 **BREAKING:** Introducing the new [Flamingo CLI](https://github.com/flux-subsystem-argo/cli)! 🚀🚀🚀
+> 🚀🚀🚀 **BREAKING:** Introducing the new [Flamingo CLI](https://github.com/flux-subsystem-argo/flamingo)! 🚀🚀🚀
 
 Flamingo is the **Flux Subsystem for Argo** (FSA). Flamingo's container image can be used as a drop-in extension for the equivalent ArgoCD version to visualize, and manage Flux workloads, alongside ArgoCD. You can also ensure that upstream CVEs in Argo CD are quickly backported to Flamingo, maintaining a secure and stable environment.
 
