@@ -61,7 +61,7 @@ brew install fluxcd/tap/flux
 brew install flux-subsystem-argo/tap/flamingo
 
 # or with cURL
-curl -sL https://bit.ly/flamingo-cli | sudo bash
+curl -sL https://raw.githubusercontent.com/flux-subsystem-argo/flamingo/main/install/flamingo.sh | sudo bash
 ```
 
 Create a fresh KIND cluster
