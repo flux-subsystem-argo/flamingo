@@ -30,7 +30,7 @@ flamingo install --version=%s
 
 # Install the Flux Subsystem for Argo with the anonymous UI enabled
 flamingo install --version=%s --anonymous
-`, installFlags.version, installFlags.version),
+`, ServerVersion, ServerVersion),
 	RunE: installCmdRun,
 }
 
@@ -75,6 +75,11 @@ func installCmdRun(cmd *cobra.Command, args []string) error {
 	}
 	if strings.HasSuffix(installFlags.version, "-dev") {
 		installFlags.dev = true
+	}
+	// prefix version with "v" if it doesn't start with it
+	// so we can use this command like this: flamingo install -v2.0.0
+	if strings.HasPrefix(installFlags.version, "v") == false {
+		installFlags.version = "v" + installFlags.version
 	}
 
 	logger.Actionf("obtaining version info")
