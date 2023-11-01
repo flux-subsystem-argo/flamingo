@@ -130,6 +130,52 @@ flamingo generate-app \
   -n podinfo-kustomize ks/podinfo
 ```
 
+Create a **Flux HelmRelease**
+
+```shell
+cat << EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: podinfo-helm
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: podinfo
+  namespace: podinfo-helm
+spec:
+  interval: 10m
+  type: oci
+  url: oci://ghcr.io/stefanprodan/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: podinfo
+  namespace: podinfo-helm
+spec:
+  interval: 10m
+  targetNamespace: podinfo-helm
+  chart:
+    spec:
+      chart: podinfo
+      version: '*'
+      sourceRef:
+        kind: HelmRepository
+        name: podinfo
+      verify:
+        provider: cosign # keyless
+EOF
+```
+
+```shell
+flamingo generate-app \
+  --app-name=podinfo-hr \
+  -n podinfo-helm hr/podinfo
+```
+
 Like a normal Argo CD instance, please firstly obtain the initial password by running the following command to login.
 The default username is `admin`.
 
