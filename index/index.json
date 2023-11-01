@@ -13,7 +13,7 @@
       "flux": "v2.1.2"
     },
     {
-      "flamingo": "v2.8.5-dev",
+      "flamingo": "v2.8.5",
       "argocd": "v2.8.5",
       "image": "v2.8.5-fl.21-main-2670d8c2",
       "flux": "v2.1.2"
