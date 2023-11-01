@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.1 (2023-11-02)
+
+**New Features and Bug Fixes**
+  * Promote FSA image **v2.8.5** to the default version
+  * Add FSA image **v2.8.6** to the dev channel
+  * Add HelmRelease quickstart to the docs
+  * Fix installation script
+  * Fix `install` command help to show the latest FSA image
+  * Prefix `v` to the FSA image version for the `install` command
+
 ## v0.5.0 (2023-10-30) 
 
 **New Features and Bug Fixes**
