@@ -82,7 +82,7 @@ func installCmdRun(cmd *cobra.Command, args []string) error {
 		installFlags.version = "v" + installFlags.version
 	}
 
-	logger.Actionf("obtaining version info")
+	logger.Actionf("obtaining version info %s", installFlags.version)
 
 	client := &http.Client{}
 
