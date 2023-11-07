@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.1 (2023-11-08)
+
+**New Features and Bug Fixes**
+
+  * SSA wait timeout is changed from 1 to 5 minutes
+
 ## v0.6.0 (2023-11-07)
 
 **New Features and Bug Fixes**
