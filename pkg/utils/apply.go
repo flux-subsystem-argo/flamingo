@@ -137,5 +137,5 @@ func waitForSet(rcg genericclioptions.RESTClientGetter, opts *runclient.Options,
 	if err != nil {
 		return err
 	}
-	return man.WaitForSet(changeSet.ToObjMetadataSet(), ssa.WaitOptions{Interval: 2 * time.Second, Timeout: time.Minute})
+	return man.WaitForSet(changeSet.ToObjMetadataSet(), ssa.WaitOptions{Interval: 2 * time.Second, Timeout: 5 * time.Minute})
 }
