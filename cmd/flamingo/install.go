@@ -291,7 +291,10 @@ func installFluxSubsystemForArgo(candidate Candidate, installMode string, anonym
 		// install everything
 		logger.Actionf("installing components in %s namespace", rootArgs.applicationNamespace)
 	}
-	applyOutput, err := utils.Apply(context.Background(), kubeconfigArgs, kubeclientOptions, yamlOutput)
+
+	ctx, cancelFn := context.WithTimeout(context.Background(), rootArgs.timeout)
+	defer cancelFn()
+	applyOutput, err := utils.Apply(ctx, kubeconfigArgs, kubeclientOptions, yamlOutput)
 	if err != nil {
 		return fmt.Errorf("install failed: %w", err)
 	}
