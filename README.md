@@ -45,7 +45,7 @@ This guide will provide a step-by-step process for setting up a GitOps environme
 Install CLIs
 - [KIND CLI](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) 
 - [Flux CLI](https://fluxcd.io/docs/cmd/)
-- [Flamingo CLI](https://github.com/flux-subsystem-argo/cli)
+- [Flamingo CLI](https://github.com/flux-subsystem-argo/flamingo)
 
 Example install in macOS or Linux via [homebrew](https://brew.sh/)
 
