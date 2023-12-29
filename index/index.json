@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "flamingo": "v2.9.3-dev",
+      "argocd": "v2.9.3",
+      "image": "v2.9.3-fl.21-main-a6eaf3af",
+      "flux": "v2.1.2"
+    },
+    {
+      "flamingo": "v2.9.2-dev",
+      "argocd": "v2.9.2",
+      "image": "v2.9.2-fl.21-main-ca114998",
+      "flux": "v2.1.2"
+    },
+    {
+      "flamingo": "v2.9.1-dev",
+      "argocd": "v2.9.1",
+      "image": "v2.9.1-fl.21-main-794f2ef5",
+      "flux": "v2.1.2"
+    },
+    {
       "flamingo": "v2.9.0-dev",
       "argocd": "v2.9.0",
       "image": "v2.9.0-fl.21-main-b55851f8",
