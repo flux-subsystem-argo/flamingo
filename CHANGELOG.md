@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.7.0 (2023-12-30)
+
+**New Features and Bug Fixes**
+
+  * Promote FSA image **v2.9.3** to the default version
+
 ## v0.6.1 (2023-11-08)
 
 **New Features and Bug Fixes**
