@@ -89,6 +89,7 @@ func generateKustomizationApp(c client.Client, appName, objectName string, kindN
 	params.WorkloadType = kindName
 	params.SourceType = sourceKind
 
+	// The default path is '.' unless provided by the object
 	params.Path = "."
 	if object.Spec.Path != "" {
 		params.Path = object.Spec.Path
