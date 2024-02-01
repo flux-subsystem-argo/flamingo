@@ -1,3 +1,5 @@
 .idea/
 bin/
 *.py
+
+cmd/flamingo/flamingo
