@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"strings"
+	"text/template"
+
 	kustomizev1 "github.com/fluxcd/kustomize-controller/api/v1"
 	sourcev1 "github.com/fluxcd/source-controller/api/v1"
 	sourcev1b2 "github.com/fluxcd/source-controller/api/v1beta2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"strings"
-	"text/template"
 )
 
 const ksAppTemplate = `---
@@ -88,7 +89,11 @@ func generateKustomizationApp(c client.Client, appName, objectName string, kindN
 	params.WorkloadType = kindName
 	params.SourceType = sourceKind
 
-	params.Path = object.Spec.Path
+	// The default path is '.' unless provided by the object
+	params.Path = "."
+	if object.Spec.Path != "" {
+		params.Path = object.Spec.Path
+	}
 
 	switch sourceKind {
 	case sourcev1.GitRepositoryKind:
