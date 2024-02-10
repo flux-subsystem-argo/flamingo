@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.8.0 (2024-02-10)
+
+**New Features and Bug Fixes**
+
+  * Add FSA image **v2.9.6** to the index
+  * Fix empty path in Kustomization (generate-app ks)
+
 ## v0.7.0 (2023-12-30)
 
 **New Features and Bug Fixes**
