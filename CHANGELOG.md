@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.8.1 (2024-02-10)
+
+**New Features and Bug Fixes**
+
+  * Fix health check for OCI HelmRepository in Flux v2.2.x.
+
 ## v0.8.0 (2024-02-10)
 
 **New Features and Bug Fixes**
