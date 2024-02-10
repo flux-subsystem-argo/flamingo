@@ -1,6 +1,12 @@
 {
   "candidates": [
     {
+      "flamingo": "v2.9.6-dev",
+      "argocd": "v2.9.6",
+      "image": "v2.9.6-fl.21-main-89506f84",
+      "flux": "v2.2.3"
+    },
+    {
       "flamingo": "v2.9.3",
       "argocd": "v2.9.3",
       "image": "v2.9.3-fl.21-main-a6eaf3af",
@@ -28,6 +34,12 @@
       "flamingo": "v2.9.0-rc3-dev",
       "argocd": "v2.9.0-rc3",
       "image": "v2.9.0-rc3-fl.21-main-1fecd6b1",
+      "flux": "v2.1.2"
+    },
+    {
+      "flamingo": "v2.8.10",
+      "argocd": "v2.8.10",
+      "image": "v2.8.10-fl.21-main-7ef6c602",
       "flux": "v2.1.2"
     },
     {
@@ -59,6 +71,12 @@
       "argocd": "v2.8.1",
       "image": "v2.8.1-fl.21-main-7242d1b4",
       "flux": "v2.1.0"
+    },
+    {
+      "flamingo": "v2.7.17",
+      "argocd": "v2.7.17",
+      "image": "v2.7.17-fl.15-main-f762c2ac",
+      "flux": "v2.0.1"
     },
     {
       "flamingo": "v2.7.14",
