@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.8.3 (2024-02-16)
+
+**New Features and Bug Fixes**
+
+  * Add new FSA image **v2.9.6** that supports HelmRelease v2beta2.
+
 ## v0.8.2 (2024-02-10)
 
 **New Features and Bug Fixes**
