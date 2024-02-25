@@ -26,13 +26,14 @@ metadata:
     flamingo/workload-type: "{{ .WorkloadType }}"
     flamingo/source-type: "{{ .SourceType }}"
     flamingo/destination-namespace: "{{ .DestinationNamespace }}"
+    flamingo/cluster-name: "{{ .ClusterName }}"
   annotations:
     weave.gitops.flamingo/base-url: "http://localhost:9001"
     weave.gitops.flamingo/cluster-name: "Default"
 spec:
   destination:
     namespace: {{ .DestinationNamespace }}
-    server: https://kubernetes.default.svc
+    server: {{ .Server }}
   project: default
   source:
     path: {{ .Path }}
@@ -44,7 +45,7 @@ spec:
     - FluxSubsystem=true
 `
 
-func generateKustomizationApp(c client.Client, appName, objectName string, kindName string, tpl *bytes.Buffer) error {
+func generateKustomizationApp(c client.Client, appName string, objectName string, kindName string, clusterName string, server string, tpl *bytes.Buffer) error {
 	object := kustomizev1.Kustomization{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      objectName,
@@ -75,6 +76,9 @@ func generateKustomizationApp(c client.Client, appName, objectName string, kindN
 		WorkloadName         string
 		SourceType           string
 		DestinationNamespace string
+		ClusterName          string
+
+		Server string
 
 		Path           string
 		SourceURL      string
@@ -88,6 +92,9 @@ func generateKustomizationApp(c client.Client, appName, objectName string, kindN
 	params.WorkloadName = object.Name
 	params.WorkloadType = kindName
 	params.SourceType = sourceKind
+	params.ClusterName = clusterName
+
+	params.Server = server
 
 	// The default path is '.' unless provided by the object
 	params.Path = "."

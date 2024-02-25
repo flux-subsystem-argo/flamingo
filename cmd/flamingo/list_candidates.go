@@ -16,8 +16,8 @@ const url = "https://raw.githubusercontent.com/flux-subsystem-argo/flamingo/main
 
 var listCandidates = &cobra.Command{
 	Use:     "list-candidates",
-	Short:   "List candidates",
-	Aliases: []string{"lc"},
+	Aliases: []string{"list-candidate", "candidates", "candidate"},
+	Short:   "List installation candidates",
 	RunE:    listCmdRun,
 }
 

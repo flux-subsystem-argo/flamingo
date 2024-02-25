@@ -17,7 +17,7 @@ var generateAppCmd = &cobra.Command{
 	Use:     "generate-app NAME",
 	Aliases: []string{"gen-app"},
 	Args:    cobra.ExactArgs(1),
-	Short:   "Generate a Flamingo application from Flux resources",
+	Short:   "Generate a Flamingo application from Flux resources (Kustomization or HelmRelease)",
 	Long: `
 # Generate a Flamingo application from a Flux Kustomization podinfo in the current namespace (flux-system).
 # The generated application is put in the argocd namespace by default.
@@ -31,6 +31,12 @@ flamingo generate-app hr/podinfo
 
 # Generate a Flamingo application from a HelmRelease podinfo in the podinfo namespace.
 flamingo generate-app -n podinfo hr/podinfo
+
+# Generate a Flamingo application named podinfo-ks, from a Flux Kustomization podinfo in the podinfo-kustomize namespace of the dev-1 cluster.
+# The generated application is put in the argocd namespace of the current cluster.
+flamingo generate-app \
+  --app-name=podinfo-ks \
+  -n podinfo-kustomize dev-1/ks/podinfo
 `,
 	RunE: generateAppCmdRun,
 }
@@ -48,15 +54,23 @@ func init() {
 }
 
 func generateAppCmdRun(_ *cobra.Command, args []string) error {
-	cli, err := utils.KubeClient(kubeconfigArgs, kubeclientOptions)
-	if err != nil {
-		return err
-	}
-
-	kindSlashName := args[0]
 	isValid := false
+	clusterName := ""
 	kindName := ""
 	objectName := ""
+
+	kindSlashName := ""
+	// FQN: fully qualified name is in the format of kind/name cluster-name/kind/name
+	fqn := args[0]
+	if strings.Count(fqn, "/") == 1 {
+		clusterName = "in-cluster"
+		kindSlashName = fqn
+	} else if strings.Count(fqn, "/") == 2 {
+		clusterName = strings.SplitN(fqn, "/", 2)[0]
+		kindSlashName = strings.SplitN(fqn, "/", 2)[1]
+	} else {
+		return fmt.Errorf("not a valid Kustomization or HelmRelease resource")
+	}
 
 	// Define a map for valid kinds with their short and full names
 	var validKinds = map[string]string{
@@ -90,13 +104,31 @@ func generateAppCmdRun(_ *cobra.Command, args []string) error {
 		appName = objectName
 	}
 
+	mgmtCli, err := utils.KubeClient(kubeconfigArgs, kubeclientOptions)
+	if err != nil {
+		return err
+	}
+
+	leafCli := mgmtCli
+	var clusterConfig *utils.ClusterConfig
+	if clusterName != "in-cluster" && clusterName != "" {
+		leafCli, clusterConfig, err = utils.KubeClientForLeafCluster(mgmtCli, clusterName, kubeclientOptions)
+		if err != nil {
+			return err
+		}
+	} else {
+		clusterConfig = &utils.ClusterConfig{
+			Server: "https://kubernetes.default.svc",
+		}
+	}
+
 	var tpl bytes.Buffer
 	if kindName == kustomizev1.KustomizationKind {
-		if err := generateKustomizationApp(cli, appName, objectName, kindName, &tpl); err != nil {
+		if err := generateKustomizationApp(leafCli, appName, objectName, kindName, clusterName, clusterConfig.Server, &tpl); err != nil {
 			return err
 		}
 	} else if kindName == helmv2b1.HelmReleaseKind {
-		if err := generateHelmReleaseApp(cli, appName, objectName, kindName, &tpl); err != nil {
+		if err := generateHelmReleaseApp(leafCli, appName, objectName, kindName, clusterName, clusterConfig.Server, &tpl); err != nil {
 			return err
 		}
 	}

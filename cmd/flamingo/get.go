@@ -63,7 +63,7 @@ func getCmdRun(cmd *cobra.Command, args []string) error {
 	}
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(w, "NAMESPACE\tAPP-NS\tAPP\tFLUX-TYPE\tSOURCE-TYPE\tSTATUS\tMESSAGE")
+	fmt.Fprintln(w, "NAMESPACE\tAPP-NS\tAPP\tFLUX-TYPE\tSOURCE-TYPE\tCLUSTER\tSTATUS\tMESSAGE")
 	for _, item := range list.Items {
 		labels := item.GetLabels()
 		// Extract the necessary fields from the Unstructured object
@@ -71,6 +71,7 @@ func getCmdRun(cmd *cobra.Command, args []string) error {
 		appType := labels["flamingo/workload-type"]
 		sourceType := labels["flamingo/source-type"]
 		objectNs := labels["flamingo/destination-namespace"]
+		clusterName := labels["flamingo/cluster-name"]
 		status, err := extractStatus(&item)
 		if err != nil {
 			status = err.Error()
@@ -82,12 +83,13 @@ func getCmdRun(cmd *cobra.Command, args []string) error {
 		if len(message) > 40 {
 			message = message[:40] + " ..."
 		}
-		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 			objectNs,
 			item.GetNamespace(),
 			item.GetName(),
 			appType,
 			sourceType,
+			clusterName,
 			status,
 			message)
 	}

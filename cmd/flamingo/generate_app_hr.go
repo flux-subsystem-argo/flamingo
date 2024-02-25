@@ -24,13 +24,14 @@ metadata:
     flamingo/workload-type: "{{ .WorkloadType }}"
     flamingo/source-type: "{{ .SourceType }}"
     flamingo/destination-namespace: "{{ .DestinationNamespace }}"
+    flamingo/cluster-name: "{{ .ClusterName }}"
   annotations:
     weave.gitops.flamingo/base-url: "http://localhost:9001"
     weave.gitops.flamingo/cluster-name: "Default"
 spec:
   destination:
     namespace: {{ .DestinationNamespace }}
-    server: https://kubernetes.default.svc
+    server: {{ .Server }}
   project: default
   source:
     chart: {{ .ChartName }}
@@ -44,7 +45,7 @@ spec:
     - FluxSubsystem=true
 `
 
-func generateHelmReleaseApp(c client.Client, appName, objectName string, kindName string, tpl *bytes.Buffer) error {
+func generateHelmReleaseApp(c client.Client, appName string, objectName string, kindName string, clusterName string, server string, tpl *bytes.Buffer) error {
 	object := helmv2b1.HelmRelease{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      objectName,
@@ -75,6 +76,9 @@ func generateHelmReleaseApp(c client.Client, appName, objectName string, kindNam
 		WorkloadType         string
 		SourceType           string
 		DestinationNamespace string
+		ClusterName          string
+
+		Server string
 
 		ChartName     string
 		ChartURL      string
@@ -89,6 +93,9 @@ func generateHelmReleaseApp(c client.Client, appName, objectName string, kindNam
 	params.WorkloadName = object.Name
 	params.WorkloadType = kindName
 	params.SourceType = sourceKind
+	params.ClusterName = clusterName
+
+	params.Server = server
 
 	params.ChartName = object.Spec.Chart.Spec.Chart
 	params.ChartRevision = object.Spec.Chart.Spec.Version
