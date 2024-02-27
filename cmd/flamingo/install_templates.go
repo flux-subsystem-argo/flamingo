@@ -119,3 +119,41 @@ subjects:
   name: argocd-application-controller
   namespace: %s
 `
+
+const helmReleaseInstallTemplate = `
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Namespace }}
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: argo-helm-repo
+  namespace: {{ .Namespace }}
+spec:
+  interval: 10m
+  url: https://argoproj.github.io/argo-helm
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: flamingo
+  namespace: {{ .Namespace }}
+spec:
+  interval: 10m
+  targetNamespace: argocd
+  chart:
+    spec:
+      chart: argo-cd
+      version: '*'
+      sourceRef:
+        kind: HelmRepository
+        name: argo-helm-repo
+  values:
+    global:
+      image:
+        repository: ghcr.io/flux-subsystem-argo/fsa/argocd
+        tag: {{ .Image }}
+`

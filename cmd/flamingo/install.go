@@ -25,11 +25,17 @@ var installCmd = &cobra.Command{
 	Use:   "install",
 	Short: "Install the Flux Subsystem for Argo",
 	Long: fmt.Sprintf(`
+# Install the Flux Subsystem for Argo with the default version
+flamingo install
+
 # Install the Flux Subsystem for Argo
 flamingo install --version=%s
 
 # Install the Flux Subsystem for Argo with the anonymous UI enabled
 flamingo install --version=%s --anonymous
+
+# Install the Flux Subsystem for Argo with HelmRelease
+flamingo install --mode=helmrelease
 `, ServerVersion, ServerVersion),
 	RunE: installCmdRun,
 }
@@ -42,20 +48,24 @@ var installFlags struct {
 	mode      string
 }
 
-const CRDsOnlyMode = "crds-only"
-const AllMode = "all"
-const TenantMode = "tenant"
+const (
+	CRDsOnlyMode    = "crds-only"
+	AllMode         = "all"
+	TenantMode      = "tenant"
+	HelmReleaseMode = "helmrelease"
+)
 
 var validModes = map[string]bool{
-	CRDsOnlyMode: true,
-	AllMode:      true,
-	TenantMode:   true,
+	CRDsOnlyMode:    true,
+	AllMode:         true,
+	TenantMode:      true,
+	HelmReleaseMode: true,
 }
 
 func init() {
 	installCmd.Flags().StringVarP(&installFlags.version, "version", "v", ServerVersion, "version of Flamingo to install")
 	installCmd.Flags().BoolVar(&installFlags.anonymous, "anonymous", false, "enable anonymous UI")
-	installCmd.Flags().StringVar(&installFlags.mode, "mode", AllMode, "installation mode [crds-only, all, tenant]")
+	installCmd.Flags().StringVar(&installFlags.mode, "mode", AllMode, "installation mode [crds-only, all, tenant, helmrelease]")
 	installCmd.Flags().BoolVar(&installFlags.export, "export", false, "export manifests instead of installing")
 
 	rootCmd.AddCommand(installCmd)
@@ -143,7 +153,11 @@ func installCmdRun(cmd *cobra.Command, args []string) error {
 	if installFlags.export || installFlags.mode == CRDsOnlyMode {
 		// do not verify the installation if we are exporting the manifests or installing CRDs only
 	} else {
-		if err := verifyTheInstallation(); err != nil {
+		releaseName := ""
+		if installFlags.mode == HelmReleaseMode {
+			releaseName = "flamingo"
+		}
+		if err := verifyTheInstallation(releaseName); err != nil {
 			return err
 		}
 	}
@@ -163,7 +177,7 @@ func buildComponentObjectRefs(namespace string, components ...string) ([]object.
 	return objRefs, nil
 }
 
-func verifyTheInstallation() error {
+func verifyTheInstallation(releaseName string) error {
 	logger.Waitingf("verifying installation")
 
 	kubeConfig, err := utils.KubeConfig(kubeconfigArgs, kubeclientOptions)
@@ -176,16 +190,31 @@ func verifyTheInstallation() error {
 		return fmt.Errorf("install failed: %w", err)
 	}
 
-	// we install Argo CD components in the application namespace (argocd), not the flux-system namespace
-	objectRefs, err := buildComponentObjectRefs(
-		rootArgs.applicationNamespace,
+	components := []string{
 		"argocd-redis",
 		"argocd-dex-server",
 		"argocd-repo-server",
 		"argocd-server",
 		"argocd-notifications-controller",
 		"argocd-applicationset-controller",
+	}
+	if releaseName != "" {
+		components = []string{
+			fmt.Sprintf("argocd-%s-redis", releaseName),
+			fmt.Sprintf("argocd-%s-dex-server", releaseName),
+			fmt.Sprintf("argocd-%s-repo-server", releaseName),
+			fmt.Sprintf("argocd-%s-server", releaseName),
+			fmt.Sprintf("argocd-%s-notifications-controller", releaseName),
+			fmt.Sprintf("argocd-%s-applicationset-controller", releaseName),
+		}
+	}
+
+	// we install Argo CD components in the application namespace (argocd), not the flux-system namespace
+	objectRefs, err := buildComponentObjectRefs(
+		rootArgs.applicationNamespace,
+		components...,
 	)
+
 	if err != nil {
 		return fmt.Errorf("install failed: %w", err)
 	}
@@ -209,6 +238,8 @@ func installFluxSubsystemForArgo(candidate Candidate, installMode string, anonym
 		tmpl = crdsOnlyInstallTemplate
 	case TenantMode:
 		tmpl = namespaceInstallTemplate
+	case HelmReleaseMode:
+		tmpl = helmReleaseInstallTemplate
 	}
 
 	patches := ""
@@ -238,46 +269,51 @@ func installFluxSubsystemForArgo(candidate Candidate, installMode string, anonym
 		return err
 	}
 
-	// Use Kustomize (krusty) to build the kustomization
-	fSys := filesys.MakeFsInMemory()
-	kustomizationPath := "/app/kustomization.yaml"
-	fSys.WriteFile(kustomizationPath, tpl.Bytes())
-
-	namespacePath := "/app/namespace.yaml"
-	if installMode == CRDsOnlyMode {
-		fSys.WriteFile(namespacePath, []byte("# empty"))
+	var yamlOutput []byte
+	if installMode == HelmReleaseMode {
+		yamlOutput = tpl.Bytes()
 	} else {
-		fSys.WriteFile(namespacePath, []byte(fmt.Sprintf(namespaceTemplate, rootArgs.applicationNamespace)))
-	}
+		// Use Kustomize (krusty) to build the kustomization
+		fSys := filesys.MakeFsInMemory()
+		kustomizationPath := "/app/kustomization.yaml"
+		fSys.WriteFile(kustomizationPath, tpl.Bytes())
 
-	clusterPath := "/app/cluster.yaml"
-	if installMode == TenantMode {
-		fSys.WriteFile(clusterPath, []byte(
-			fmt.Sprintf(defaultClusterSecretTemplate,
-				rootArgs.applicationNamespace,
-				rootArgs.applicationNamespace,
-				rootArgs.applicationNamespace,
-				rootArgs.applicationNamespace,
-				rootArgs.applicationNamespace,
-			)))
-	} else {
-		fSys.WriteFile(clusterPath, []byte("# empty"))
-	}
+		namespacePath := "/app/namespace.yaml"
+		if installMode == CRDsOnlyMode {
+			fSys.WriteFile(namespacePath, []byte("# empty"))
+		} else {
+			fSys.WriteFile(namespacePath, []byte(fmt.Sprintf(namespaceTemplate, rootArgs.applicationNamespace)))
+		}
 
-	opts := krusty.MakeDefaultOptions()
-	opts.Reorder = krusty.ReorderOptionLegacy
-	k := krusty.MakeKustomizer(opts)
+		clusterPath := "/app/cluster.yaml"
+		if installMode == TenantMode {
+			fSys.WriteFile(clusterPath, []byte(
+				fmt.Sprintf(defaultClusterSecretTemplate,
+					rootArgs.applicationNamespace,
+					rootArgs.applicationNamespace,
+					rootArgs.applicationNamespace,
+					rootArgs.applicationNamespace,
+					rootArgs.applicationNamespace,
+				)))
+		} else {
+			fSys.WriteFile(clusterPath, []byte("# empty"))
+		}
 
-	m, err := k.Run(fSys, "/app")
-	if err != nil {
-		return err
-	}
+		opts := krusty.MakeDefaultOptions()
+		opts.Reorder = krusty.ReorderOptionLegacy
+		k := krusty.MakeKustomizer(opts)
 
-	yamlOutput, err := m.AsYaml()
-	if err != nil {
-		return err
+		m, err := k.Run(fSys, "/app")
+		if err != nil {
+			return err
+		}
+
+		yamlOutput, err = m.AsYaml()
+		if err != nil {
+			return err
+		}
+		logger.Successf("manifests build completed")
 	}
-	logger.Successf("manifests build completed")
 
 	if export {
 		fmt.Println(string(yamlOutput))
