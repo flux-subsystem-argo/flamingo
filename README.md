@@ -38,7 +38,8 @@ Loopback Reconciliation helps to ensure the reliability and consistency of GitOp
 
 This guide will provide a step-by-step process for setting up a GitOps environment using Flux and ArgoCD, via Flamingo. By the end of this guide, you will have Flamingo running locally on your KIND cluster. You will create a `podinfo` application with a Flux Kustomization, and generate a Flamingo app from this Flux object.
 
-Install CLIs
+### Install CLIs
+
 - [KIND CLI](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) 
 - [Flux CLI](https://fluxcd.io/docs/cmd/)
 - [Flamingo CLI](https://github.com/flux-subsystem-argo/flamingo)
@@ -60,28 +61,82 @@ brew install flux-subsystem-argo/tap/flamingo
 curl -sL https://raw.githubusercontent.com/flux-subsystem-argo/flamingo/main/install/flamingo.sh | sudo bash
 ```
 
-Create a fresh KIND cluster
+### Create a fresh KIND cluster
 
 ```shell
 kind create cluster
 ```
 
-Install **Flux**
+### Install **Flux**
 
 ```shell
 flux install
 ```
 
-Install **Flamingo**
+### Install **Flamingo**
+
+#### Install **Flamingo** via CLI
 
 ```shell
 flamingo install
+```
 
+```shell
 # or with a specific version
 flamingo install --version=v2.8.4
 ```
 
-Create a **Flux Kustomization**
+#### Install **Flamingo** with HelmRelease
+
+```yaml
+cat << EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: argo-helm-repo
+  namespace: argocd
+spec:
+  interval: 10m
+  url: https://argoproj.github.io/argo-helm
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: flamingo
+  namespace: argocd
+spec:
+  interval: 10m
+  targetNamespace: argocd
+  chart:
+    spec:
+      chart: argo-cd
+      version: '*'
+      sourceRef:
+        kind: HelmRepository
+        name: argo-helm-repo
+  values:
+    global:
+      image:
+        repository: ghcr.io/flux-subsystem-argo/fsa/argocd
+        tag: v2.9.6-fl.22-main-402c9e49
+EOF
+```
+
+If you want to see Flamingo itself as an application, run:
+
+```shell
+flamingo gen-app --app-name=flamingo -n argocd hr/flamingo
+```
+
+### Example workloads
+
+#### Create a **Flux Kustomization**
 
 ```yaml
 cat << EOF | kubectl apply -f -
@@ -118,7 +173,7 @@ spec:
 EOF
 ```
 
-Generate a Flamingo application to visualize the `podinfo` objects.
+To generate a Flamingo application to visualize the `podinfo` objects, run:
 
 ```shell
 flamingo generate-app \
@@ -126,7 +181,7 @@ flamingo generate-app \
   -n podinfo-kustomize ks/podinfo
 ```
 
-Create a **Flux HelmRelease**
+#### Create a **Flux HelmRelease**
 
 ```shell
 cat << EOF | kubectl apply -f -
@@ -146,7 +201,7 @@ spec:
   type: oci
   url: oci://ghcr.io/stefanprodan/charts
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: podinfo
