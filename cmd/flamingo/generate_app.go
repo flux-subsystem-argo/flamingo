@@ -43,11 +43,14 @@ flamingo generate-app \
 
 var generateAppFlags struct {
 	appName string
+	server  string
 	export  bool
 }
 
 func init() {
-	generateAppCmd.Flags().StringVar(&generateAppFlags.appName, "app-name", "", "export the generated application to stdout")
+	// app name should be default to the resource name
+	generateAppCmd.Flags().StringVar(&generateAppFlags.appName, "app-name", "", "name of the generated application")
+	generateAppCmd.Flags().StringVar(&generateAppFlags.server, "server", "", "server URL to override the destination cluster")
 	generateAppCmd.Flags().BoolVar(&generateAppFlags.export, "export", false, "export the generated application to stdout")
 
 	rootCmd.AddCommand(generateAppCmd)
@@ -120,6 +123,11 @@ func generateAppCmdRun(_ *cobra.Command, args []string) error {
 		clusterConfig = &utils.ClusterConfig{
 			Server: "https://kubernetes.default.svc",
 		}
+	}
+
+	// Override the server URL if provided
+	if generateAppFlags.server != "" {
+		clusterConfig.Server = generateAppFlags.server
 	}
 
 	var tpl bytes.Buffer

@@ -239,3 +239,46 @@ After that you can port forward and open your browser to http://localhost:8080
 ```shell
 kubectl -n argocd port-forward svc/argocd-server 8080:443
 ```
+
+## Multi-cluster support
+
+### What is Flamingo multi-cluster support?
+
+Flamingo multi-cluster is a feature designed to visualize multiple Flux clusters in the Flamingo UI.
+We use ArgoCD cluster secrets to store cluster information for Flamingo multi-cluster support.
+To list clusters, use the following command:
+
+```shell
+flamingo list-clusters
+```
+
+To register a Kubernetes cluster with Flamingo, simply use the `add-cluster` command.
+For example, the following command adds the `dev-1` cluster definition from the `KUBECONFIG` file, then overrides the server name and server address, and sets it to skip TLS verification.
+
+```shell
+flamingo add-cluster dev-1 \
+  --server-name=dev-1.vcluster-dev-1 \
+  --server-addr=https://dev-1.vcluster-dev-1.svc \
+  --insecure
+```
+
+This `add-cluster` command currently supports adding a cluster with static credentials, such as client certs and client keys (like Vclusters), but does not yet support authentication via KubeClient plugins. For clusters like EKS and others, you need to create cluster secrets manually.
+
+To generate applications from Flux workloads on leaf clusters, the flamingo `generate-app` command has been extended to support the resource format as `cluster/kind/object-name`, for example:
+
+```shell
+flamingo generate-app \
+  dev-1/ks/podinfo
+```
+
+The above command will generate an application named `podinfo` from the `ks` resource on the `dev-1` cluster.
+This `generate-app` command uses Flamingo cluster information to connect to the leaf cluster and generate the application.
+Currently, this command only supports static cluster credentials with client certs and keys.
+For dynamic cluster credentials like in EKS and others, you would use the `--context` flag to select the Kube's context for the leaf cluster and generate the application with the `--server` flag to override the destination cluster, like:
+
+```shell
+flamingo generate-app \
+  --context=dev-1 \
+  --server=https://dev-1.vcluster-dev-1.svc \
+  ks/podinfo --export | kubectl apply -f -
+```
