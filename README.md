@@ -113,6 +113,7 @@ metadata:
 spec:
   interval: 10m
   targetNamespace: argocd
+  releaseName: argocd
   chart:
     spec:
       chart: argo-cd
@@ -124,7 +125,7 @@ spec:
     global:
       image:
         repository: ghcr.io/flux-subsystem-argo/fsa/argocd
-        tag: v2.9.6-fl.22-main-402c9e49
+        tag: v2.9.6-fl.22-main-402c9e49 # replace with the latest version
 EOF
 ```
 
