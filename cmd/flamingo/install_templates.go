@@ -144,6 +144,7 @@ metadata:
 spec:
   interval: 10m
   targetNamespace: argocd
+  releaseName: argocd
   chart:
     spec:
       chart: argo-cd

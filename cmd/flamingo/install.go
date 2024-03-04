@@ -153,11 +153,7 @@ func installCmdRun(cmd *cobra.Command, args []string) error {
 	if installFlags.export || installFlags.mode == CRDsOnlyMode {
 		// do not verify the installation if we are exporting the manifests or installing CRDs only
 	} else {
-		releaseName := ""
-		if installFlags.mode == HelmReleaseMode {
-			releaseName = "flamingo"
-		}
-		if err := verifyTheInstallation(releaseName); err != nil {
+		if err := verifyTheInstallation(); err != nil {
 			return err
 		}
 	}
@@ -177,7 +173,7 @@ func buildComponentObjectRefs(namespace string, components ...string) ([]object.
 	return objRefs, nil
 }
 
-func verifyTheInstallation(releaseName string) error {
+func verifyTheInstallation() error {
 	logger.Waitingf("verifying installation")
 
 	kubeConfig, err := utils.KubeConfig(kubeconfigArgs, kubeclientOptions)
@@ -197,16 +193,6 @@ func verifyTheInstallation(releaseName string) error {
 		"argocd-server",
 		"argocd-notifications-controller",
 		"argocd-applicationset-controller",
-	}
-	if releaseName != "" {
-		components = []string{
-			fmt.Sprintf("argocd-%s-redis", releaseName),
-			fmt.Sprintf("argocd-%s-dex-server", releaseName),
-			fmt.Sprintf("argocd-%s-repo-server", releaseName),
-			fmt.Sprintf("argocd-%s-server", releaseName),
-			fmt.Sprintf("argocd-%s-notifications-controller", releaseName),
-			fmt.Sprintf("argocd-%s-applicationset-controller", releaseName),
-		}
 	}
 
 	// we install Argo CD components in the application namespace (argocd), not the flux-system namespace
