@@ -1,5 +1,22 @@
 # Changelog
 
+Changes of the notable versions of the Flamingo CLI are documented in this file. 
+
+## v0.10.2 (2024-03-05)
+
+**New Features and Bug Fixes**
+
+  * Add new FSA image **v2.10.2** as the default version.
+  * Promoted `v2.10.2-fl.23-main-d2c9a8cb` to the default version.
+  * Implement `flamingo/{kustomize,helmrelease,gitrepository,ocirepository,helmrepository}-override` to override the default configuration in the auto-create mode.
+  * Implement `flamingo/{kustomize,helmrelease,gitrepository,ocirepository,helmrepository}-replace` to replace the default configuration in the auto-create mode.
+  * Multi-cluster support for remote Flux clusters. The multi-cluster support works with any kinds of cluster configurations, but there are some limitation in the Flamingo CLI commands, see below.
+  * Implement `flamingo add-cluster` to generate a cluster secret for the remote Flux cluster. This command currently supports only the static cluster configuration. 
+  * Implement `flamingo generate-app cluster/kind/resource` to generate an Application CR for resources in the remote Flux cluster. This command currently supports only the static cluster configuration.
+  * Add `flamingo install --mode=helmrelease` to install Flamingo with HelmRelease. This command also support `--export` flag to export the HelmRelease CR.
+  * Add documentation for the multi-cluster support.
+  * Add documentation for the `flamingo install --mode=helmrelease` command.
+
 ## v0.8.3 (2024-02-16)
 
 **New Features and Bug Fixes**

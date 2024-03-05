@@ -125,7 +125,7 @@ spec:
     global:
       image:
         repository: ghcr.io/flux-subsystem-argo/fsa/argocd
-        tag: v2.9.6-fl.22-main-402c9e49 # replace with the latest version
+        tag: v2.10.2-fl.23-main-d2c9a8cb # replace with the latest version
 EOF
 ```
 
