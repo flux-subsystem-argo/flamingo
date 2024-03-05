@@ -17,12 +17,18 @@ Changes of the notable versions of the Flamingo CLI are documented in this file.
   * Add documentation for the multi-cluster support.
   * Add documentation for the `flamingo install --mode=helmrelease` command.
 
+## v0.9.0
+
+**New Features and Bug Fixes**
+
+  * Started to implement multi-cluster support.
+  * Promoted `v2.9.6-fl.22-main-402c9e49` to the default version.
+
 ## v0.8.3 (2024-02-16)
 
 **New Features and Bug Fixes**
 
   * Add new FSA image **v2.9.6** that supports HelmRelease v2beta2.
-  * Promoted `v2.9.6-fl.22-main-402c9e49` to the default version.
 
 ## v0.8.2 (2024-02-10)
 
